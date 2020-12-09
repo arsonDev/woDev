@@ -5,7 +5,13 @@
             "type": "docker",
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
-            "platform": "node"
+            "platform": "node",
+            "node": {
+                "localRoot": "${workspaceFolder}"
+            },
+            "port": 9229,
+            "remoteRoot":"/usr/src/app",
+            "protocol":"inspector"
         }
     ]
 }

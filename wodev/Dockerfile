@@ -1,10 +1,8 @@
-FROM node:12.18-alpine AS builder
-WORKDIR /app
-COPY . .
-RUN yarn run build
-
 FROM node:12.18-alpine
-RUN yarn global add serve
-WORKDIR /app
-COPY --from=builder /app/build .
-CMD ["serve", "-p", "80", "-s", "."]
+ENV NODE_ENV=production
+WORKDIR /usr/src/app
+COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
+RUN npm install --silent && mv node_modules ../
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]
