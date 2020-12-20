@@ -1,3 +1,20 @@
+.center {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
 .loginForm{
     margin:auto;
+    width: 30vw;
 }
+
+.fullWidth{
+    width: 100%;
+}
+
+.input {
+    margin-bottom: 10px;
+}
+
