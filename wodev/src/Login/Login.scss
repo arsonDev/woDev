@@ -6,7 +6,6 @@
 }
 
 .loginForm{
-    margin:auto;
     width: 30vw;
 }
 
@@ -14,7 +13,19 @@
     width: 100%;
 }
 
+.halfWidth {
+    width : 50%;
+    margin: 0 auto;
+    display: block !important;
+}
+
 .input {
     margin-bottom: 10px;
 }
 
+.horizontalGroup{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+}

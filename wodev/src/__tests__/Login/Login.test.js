@@ -10,7 +10,7 @@ describe("Login form test", () => {
         expect(getByPlaceholderText("Password")).toBeInTheDocument();
     });
 
-    test("login validation test", async () => {
+    test("log in validation test", async () => {
         const { getByText } = render(<Login />);
         act(() => {
             fireEvent(
@@ -27,7 +27,7 @@ describe("Login form test", () => {
         expect(passwordReq).toBeInTheDocument();
     });
 
-    test("login validation password to short", async () => {
+    test("log in validation password to short", async () => {
         const { getByText, getByPlaceholderText } = render(<Login />);
         fireEvent.change(getByPlaceholderText("Password"), { target: { value: "abcde" } });
         act(() => {
