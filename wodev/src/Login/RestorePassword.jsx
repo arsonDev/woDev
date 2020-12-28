@@ -14,16 +14,14 @@ export default function RestorePassword() {
             <form name="resotrePassword" onSubmit={handleSubmit(onSubmit)}>
                 <h3>Na podany email zostanie wysłany link z możliwością zmiany hasła</h3>
                 <input type="text" name="email" placeholder="Email" className="form-control form-control-lg input" ref={register({ required: true, pattern: /^\S+@\S+$/i })} />
-                {errors.email?.type ==='pattern' && <ErrorMessage>Email jest nieprawidłowy</ErrorMessage>}
-                {errors.email?.type ==='required' && <ErrorMessage>Email jest wymagany</ErrorMessage>}
+                {errors.email?.type ==='pattern' && <ErrorMessage>Email is invalid</ErrorMessage>}
+                {errors.email?.type ==='required' && <ErrorMessage>Email is required</ErrorMessage>}
                 <div>
                     <Button type='submit' variant="contained" color="primary">
-                        Wyślij
+                        Send
                     </Button>
                 </div>
             </form>
         </div>
     );
-
-    console.log(errors);
 }
