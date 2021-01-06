@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WoDevServer.Database.Model;
+using WoDevServer.DatabaseTranslationObjects.User;
 
 namespace WoDevServer.Database.Repository
 {
@@ -10,11 +11,9 @@ namespace WoDevServer.Database.Repository
     {
         bool SaveChanges();
 
-        IEnumerable<User> GetAllUsers();
+        Task<IEnumerable<User>> GetAllUsersAsync();
 
-        User GetById(int id);
-
-        User GetByEmail(string email);
+        Task<User> GetByEmailAsync(string email);
 
         void Create(User data);
 
@@ -24,6 +23,8 @@ namespace WoDevServer.Database.Repository
 
         Task<User> GetByIdAsync(int id);
 
-        Task CreateAsync(User data);
+        Task CreateAsync(UserCreate data);
+
+        Task<User> Authenticate(string userName, string password);
     }
 }

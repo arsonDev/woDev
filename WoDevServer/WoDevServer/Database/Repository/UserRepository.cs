@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WoDevServer.Database.Model;
+using WoDevServer.DatabaseTranslationObjects.User;
 
 namespace WoDevServer.Database.Repository
 {
@@ -25,28 +26,33 @@ namespace WoDevServer.Database.Repository
             _context.Add(data);
         }
 
-        public async Task CreateAsync(User data)
+        public async Task CreateAsync(UserCreate data)
         {
             if (data == null)
             {
                 throw new ArgumentNullException("Data must be not null");
             }
-            await _context.AddAsync(data);
+
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(data.Password, out passwordHash, out passwordSalt);
+            var user = new User()
+            {
+                Email = data.Email,
+                Password = passwordHash,
+                PasswordSalt = passwordSalt
+            };
+
+            await _context.AddAsync(user);
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            return _context.User.ToList();
+            return await _context.User.ToListAsync();
         }
 
-        public User GetByEmail(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
-            return _context.User.AsNoTracking().FirstOrDefault(x => x.Email == email);
-        }
-
-        public User GetById(int id)
-        {
-            return _context.User.AsEnumerable().FirstOrDefault(x => x.Id == id);
+            return await _context.User.AsNoTracking().FirstOrDefaultAsync(x => x.Email == email || x.Login == email);
         }
 
         public async Task<User> GetByIdAsync(int id)
@@ -67,6 +73,56 @@ namespace WoDevServer.Database.Repository
         public void Update(User data)
         {
             _context.Update(data);
+        }
+
+        public async Task<User> Authenticate(string username, string password)
+        {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                return null;
+
+            var user = await _context.User.SingleOrDefaultAsync(x => x.Login == username || x.Email == username);
+
+            // check if username exists
+            if (user == null)
+                return null;
+
+            // check if password is correct
+            if (!VerifyPasswordHash(password, user.Password, user.PasswordSalt))
+                return null;
+
+            // authentication successful
+            return user;
+        }
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        private bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        {
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
+            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != storedHash[i]) return false;
+                }
+            }
+
+            return true;
         }
     }
 }

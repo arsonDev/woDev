@@ -30,3 +30,6 @@ _ReSharper*/
 .vs/
 #Nuget packages folder
 packages/
+.vs\
+vs\
+C:\Devs_School\woDev\WoDevServer\.vs

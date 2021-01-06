@@ -21,7 +21,11 @@ namespace WoDevServer.Database.Model
 
         [Required]
         [Column("Password")]
-        public string Password { get; set; }
+        public byte[] Password { get; set; }
+
+        [Required]
+        [Column("PasswordSalt")]
+        public byte[] PasswordSalt { get; set; }
 
         [Required]
         [Column("CreateDate")]

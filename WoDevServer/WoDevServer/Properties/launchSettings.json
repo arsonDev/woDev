@@ -30,6 +30,9 @@
     "Docker": {
       "commandName": "Docker",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "environmentVariables": {
+        "DOCKER_HOST_IP": "host.docker.external"
+      },
       "publishAllPorts": true,
       "useSSL": true
     }

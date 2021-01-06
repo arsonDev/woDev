@@ -7,20 +7,31 @@ using WoDevServer.DatabaseTranslationObjects;
 using WoDevServer.DatabaseTranslationObjects.User;
 using WoDevServer.Database.Model;
 using WoDevServer.Utils;
+using Microsoft.EntityFrameworkCore;
+using WoDevServer.DatabaseTranslationObjects.Session;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using Microsoft.Extensions.Options;
 
 namespace WoDevServer.Controllers
 {
     [Route("/api/user/")]
     [ApiController]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserRepository _repository;
         private readonly IMapper _mapper;
+        private readonly AppSettings _appSettings;
 
-        public UserController(IUserRepository repository, IMapper mapper)
+        public UserController(IUserRepository repository, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _repository = repository;
             _mapper = mapper;
+            _appSettings = appSettings.Value;
         }
 
         [HttpGet("{id}")]
@@ -41,6 +52,7 @@ namespace WoDevServer.Controllers
 
         [HttpPost]
         [Route("create")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserRead>> CreateUser(UserCreate userCreate)
         {
             try
@@ -48,17 +60,74 @@ namespace WoDevServer.Controllers
                 if (userCreate == null)
                     return NotFound("User must be not null");
 
-                var password = SecurityUtils.Encrypt(userCreate.Password, "stronePassword123");
-
-                var user = _mapper.Map<User>(new UserCreate() { Email = userCreate.Email, Password = password });
-                await _repository.CreateAsync(user);
+                await _repository.CreateAsync(userCreate);
                 _repository.SaveChanges();
 
-                var userFromDb = _repository.GetByEmail(userCreate.Email);
+                var userFromDb = await _repository.GetByEmailAsync(userCreate.Email);
                 if (userCreate == null)
                     return NotFound("Could not create a user");
 
                 return Created(nameof(CreateUser), _mapper.Map<UserRead>(userFromDb));
+            }
+            catch (DbUpdateException e)
+            {
+                return NotFound(new { Error = "Dane są nieprawidłowe lub taki użytkownik już istnieje", e.Message, e.InnerException, e.StackTrace, e.Source });
+            }
+            catch (Exception e)
+            {
+                return NotFound(new { e.Message, e.InnerException, e.StackTrace, e.Source });
+            }
+        }
+
+        [HttpDelete]
+        [Route("delete")]
+        public async Task<ActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                var user = await _repository.GetByIdAsync(id);
+                if (user != null)
+                {
+                    _repository.Remove(user);
+                    return Ok();
+                }
+                return NotFound("User not found");
+            }
+            catch (Exception e)
+            {
+                return NotFound(new { e.Message, e.InnerException, e.StackTrace, e.Source });
+            }
+        }
+
+        [HttpPost]
+        [Route("login")]
+        [AllowAnonymous]
+        public async Task<ActionResult<SessionRead>> LogIn(UserCredentials userCredentials)
+        {
+            try
+            {
+                var user = await _repository.Authenticate(userCredentials.Login, userCredentials.Password);
+                if (user == null)
+                    return BadRequest("User or password incorrect");
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var tokenDescripton = new SecurityTokenDescriptor()
+                {
+                    Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, user.Id.ToString()) }),
+                    Expires = DateTime.Now.AddHours(4),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescripton);
+                var tokenString = tokenHandler.WriteToken(token);
+
+                //TODO
+                var responseTokenInfo = new
+                {
+                    Token = tokenString,
+                    Expires = tokenDescripton.Expires
+                };
+                return Ok(responseTokenInfo);
             }
             catch (Exception e)
             {
