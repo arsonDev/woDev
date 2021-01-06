@@ -1,0 +1,31 @@
+.center {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.loginForm{
+    width: 30vw;
+}
+
+.fullWidth{
+    width: 100%;
+}
+
+.halfWidth {
+    width : 50%;
+    margin: 0 auto;
+    display: block !important;
+}
+
+.input {
+    margin-bottom: 10px;
+}
+
+.horizontalGroup{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+}
