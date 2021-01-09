@@ -33,3 +33,5 @@ packages/
 .vs\
 vs\
 C:\Devs_School\woDev\WoDevServer\.vs
+.history
+wodev\node_modules\

@@ -34,7 +34,8 @@
         "DOCKER_HOST_IP": "host.docker.external"
       },
       "publishAllPorts": true,
-      "useSSL": true
+      "useSSL": true,
+      "sslPort": 443
     }
   }
 }
