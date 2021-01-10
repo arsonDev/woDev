@@ -10,12 +10,12 @@ export class LoginService{
                 localStorage.setItem("token",JSON.stringify(res.data));
                 return ResponseStatus.SUCCESS;
             }else{
-                return ResponseStatus.NOT_FOUND;
+                return ResponseStatus.UNAUTHORIZED;
             }
 
+        }).catch(err => {
+            return {message : err?.response?.data ?? err, status : ResponseStatus.UNAUTHORIZED}
         })
-        
-    
 
     SendRequest = (method,url,data) => Axios.request({method,url,data})
 }

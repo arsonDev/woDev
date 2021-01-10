@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using WoDevServer.Database.Model;
 using WoDevServer.DatabaseTranslationObjects.User;
@@ -92,6 +93,49 @@ namespace WoDevServer.Database.Repository
 
             // authentication successful
             return user;
+        }
+
+        public async Task<bool> ResetPassword(string email)
+        {
+            var user = await _context.User.SingleOrDefaultAsync(x => x.Email == email);
+            if (user == null)
+                return false;
+
+            var random = new Random();
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var newPassword = new string(Enumerable.Repeat(chars, 10)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+
+            byte[] passwordSalt = null;
+            byte[] passwordHash = null;
+
+            CreatePasswordHash(newPassword, out passwordHash, out passwordSalt);
+            if (VerifyPasswordHash(newPassword, passwordHash, passwordSalt))
+            {
+                user.Password = passwordHash;
+                user.PasswordSalt = passwordSalt;
+
+                _context.Update(user);
+                if (!SaveChanges())
+                    return false;
+
+                Utils.Mailer mailer = new Utils.Mailer();
+
+                var addressColletion = new MailAddressCollection();
+                addressColletion.Add(email);
+                var mail = new MailMessage()
+                {
+                    Body = $"Your new password to account is \n{newPassword}",
+                    Subject = "New password",
+                    From = new MailAddress("wodevapp@gmail.com")
+                };
+                mail.To.Add(email);
+
+                await mailer.SendEmail(mail);
+
+                return true;
+            }
+            return false;
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

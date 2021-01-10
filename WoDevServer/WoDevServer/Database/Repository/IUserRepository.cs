@@ -26,5 +26,7 @@ namespace WoDevServer.Database.Repository
         Task CreateAsync(UserCreate data);
 
         Task<User> Authenticate(string userName, string password);
+
+        Task<bool> ResetPassword(string email);
     }
 }

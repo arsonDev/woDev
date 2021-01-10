@@ -6,7 +6,7 @@ using WoDevServer.Database.Repository;
 using WoDevServer.DatabaseTranslationObjects;
 using WoDevServer.DatabaseTranslationObjects.User;
 using WoDevServer.Database.Model;
-using WoDevServer.Utils;
+using WoDevServer.Helper;
 using Microsoft.EntityFrameworkCore;
 using WoDevServer.DatabaseTranslationObjects.Session;
 using Microsoft.AspNetCore.Authorization;
@@ -128,6 +128,22 @@ namespace WoDevServer.Controllers
                     Expires = tokenDescripton.Expires
                 };
                 return Ok(responseTokenInfo);
+            }
+            catch (Exception e)
+            {
+                return NotFound(new { e.Message, e.InnerException, e.StackTrace, e.Source });
+            }
+        }
+
+        [Route("resetPassword")]
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult> ResetPassword(ResetPassword sourceReset)
+        {
+            try
+            {
+                var newPasswordSetted = await _repository.ResetPassword(sourceReset.Email);
+                return newPasswordSetted ? Ok() : NotFound();
             }
             catch (Exception e)
             {
