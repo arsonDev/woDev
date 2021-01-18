@@ -10,7 +10,7 @@ namespace WoDevServer.Database.Model
     {
         [Key]
         [Column("Id")]
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         [Column("Email")]

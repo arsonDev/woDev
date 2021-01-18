@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using WoDevServer.Database.Model;
 
-namespace WoDevServer.DatabaseTranslationObjects.Profile
+namespace WoDevServer.Database.Model
 {
-    public class ProfileCreate
+    public class UserProfile
     {
+        [Key]
         [Required]
-        public int UserId { get; set; }
+        [Column("Id")]
+        public int UserProfileId { get; set; }
+
+        public virtual User User { get; set; }
 
         [Required]
         public string Description { get; set; }
@@ -31,7 +35,5 @@ namespace WoDevServer.DatabaseTranslationObjects.Profile
 
         [Required]
         public int Type { get; set; }
-
-        public virtual ICollection<Technology> Technologies { get; set; }
     }
 }

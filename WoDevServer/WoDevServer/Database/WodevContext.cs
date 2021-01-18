@@ -11,6 +11,10 @@ namespace WoDevServer.Database
         }
 
         public DbSet<User> User { get; set; }
+        public DbSet<UserProfile> UserProfile { get; set; }
+        public DbSet<Technology> Technology { get; set; }
+        public DbSet<ProfileTech> ProfileTech { get; set; }
+        public DbSet<UserProfileType> UserProfileType { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,9 +22,39 @@ namespace WoDevServer.Database
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(indexExpression => indexExpression.Id).IsUnique(true);
+                entity.HasKey(entity => entity.UserId);
+                entity.HasIndex(indexExpression => indexExpression.UserId).IsUnique(true);
                 entity.HasIndex(indexExpression => indexExpression.Login).IsUnique(true);
-                entity.HasIndex(indexExpression => indexExpression.Email).IsUnique(true).HasAnnotation("IsUnique", true);
+                entity.HasIndex(indexExpression => indexExpression.Email).IsUnique(true);
+
+            });
+
+            modelBuilder.Entity<UserProfile>().ToTable("Profile");
+            modelBuilder.Entity<UserProfile>(entity =>
+            {
+                entity.HasKey(entity => entity.UserProfileId);
+
+            });
+          
+            modelBuilder.Entity<Technology>().ToTable("Technology");
+            modelBuilder.Entity<Technology>(entity =>
+            {
+                entity.HasKey(entity => entity.TechnologyId);
+                entity.HasIndex(entity => entity.TechnologyId).IsUnique();
+            });
+
+            modelBuilder.Entity<ProfileTech>().ToTable("ProfileTech");
+            modelBuilder.Entity<ProfileTech>(entity =>
+            {
+                entity.HasKey(entity => entity.Id);
+                entity.HasIndex(indexExpression => indexExpression.Id).IsUnique(true);                
+            });
+
+            modelBuilder.Entity<UserProfileType>().ToTable("UserProfileType");
+            modelBuilder.Entity<UserProfileType>(entity =>
+            {
+                entity.HasKey(entity => entity.Id);
+                entity.HasIndex(indexExpression => indexExpression.Id).IsUnique(true);
             });
         }
     }

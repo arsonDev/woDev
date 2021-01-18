@@ -59,7 +59,7 @@ export default function Login() {
                     <Link to="/restorePassword">
                         <TextButton>Forgot password</TextButton>
                     </Link>
-                    <Link to="/CreateAccount">
+                    <Link to="/createAccount">
                         <TextButton>Sign up</TextButton>
                     </Link>
                 </div>

@@ -114,7 +114,7 @@ namespace WoDevServer.Controllers
                 var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
                 var tokenDescripton = new SecurityTokenDescriptor()
                 {
-                    Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, user.Id.ToString()) }),
+                    Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, user.UserId.ToString()) }),
                     Expires = DateTime.Now.AddHours(4),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };

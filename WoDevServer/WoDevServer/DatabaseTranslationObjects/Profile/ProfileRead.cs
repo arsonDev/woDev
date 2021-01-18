@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using WoDevServer.Database.Model;
 
 namespace WoDevServer.DatabaseTranslationObjects.Profile
 {
-    public class ProfileCreate
+    public class ProfileRead
     {
+        [Required]
+        public int UserProfileId { get; set; }
+
         [Required]
         public int UserId { get; set; }
 
@@ -31,7 +33,5 @@ namespace WoDevServer.DatabaseTranslationObjects.Profile
 
         [Required]
         public int Type { get; set; }
-
-        public virtual ICollection<Technology> Technologies { get; set; }
     }
 }

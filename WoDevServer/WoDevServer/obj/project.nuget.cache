@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "2KEDCMDtSo+Cbn0qPNRNj3vCR2JvlaEQcXcYkczca0UqmD3U5tHeunt4LO8PLNbPppfLjxnZjmjT9AVqJYdbWw==",
+  "dgSpecHash": "bG27TEzk7MxLmp+CxYamqzo9R/F2c36Fc+vsD1C/3ijC0l2iRMuLkJp/Jkj5eeg3Jiy2QRj87GS62BdxCAI3TQ==",
   "success": true,
   "projectFilePath": "C:\\Devs_School\\woDev\\WoDevServer\\WoDevServer\\WoDevServer.csproj",
   "expectedPackageFiles": [
@@ -9,7 +9,7 @@
     "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.1\\microsoft.aspnetcore.authentication.jwtbearer.5.0.1.nupkg.sha512",
     "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\microsoft.aspnetcore.authorization\\5.0.1\\microsoft.aspnetcore.authorization.5.0.1.nupkg.sha512",
     "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\microsoft.aspnetcore.diagnostics.entityframeworkcore\\5.0.1\\microsoft.aspnetcore.diagnostics.entityframeworkcore.5.0.1.nupkg.sha512",
-    "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\5.0.1\\microsoft.aspnetcore.jsonpatch.5.0.1.nupkg.sha512",
+    "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\5.0.2\\microsoft.aspnetcore.jsonpatch.5.0.2.nupkg.sha512",
     "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\microsoft.aspnetcore.metadata\\5.0.1\\microsoft.aspnetcore.metadata.5.0.1.nupkg.sha512",
     "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\5.0.1\\microsoft.aspnetcore.mvc.newtonsoftjson.5.0.1.nupkg.sha512",
     "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

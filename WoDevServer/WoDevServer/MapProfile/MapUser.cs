@@ -8,9 +8,9 @@ using WoDevServer.Database.Model;
 
 namespace WoDevServer.MapProfile
 {
-    public class UserProfile : Profile
+    public class MapUser : Profile
     {
-        public UserProfile()
+        public MapUser()
         {
             CreateMap<UserCreate, User>();
             CreateMap<User, UserCreate>();
