@@ -7,7 +7,7 @@ export default function PrivateRoute({ component : Component, rest }) {
         try {
             let tokenObject = JSON.parse(localStorage.getItem("token"));
             if (tokenObject != null && tokenObject != undefined) {
-                if (moment(new Date(tokenObject.expires).toLocaleString()).diff(moment(new Date(Date.now()).toLocaleString())) > 0) return true;
+                if (new Date(tokenObject.expires).toLocaleString() > new Date(Date.now()).toLocaleString()) return true;
                 return false;
             } else {
                 return false;

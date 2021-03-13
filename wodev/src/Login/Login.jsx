@@ -1,32 +1,38 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./Login.scss";
-import { Button, Snackbar } from "@material-ui/core";
-import MuiAlert from '@material-ui/lab/Alert';
+import { Button } from "@material-ui/core";
 import { ErrorMessage } from "../Utils/ErrorMessage";
 import { TextButton } from "../Utils/TextButton";
 import { Link, Redirect } from "react-router-dom";
 import Logo from "../Resources/Logo.png";
 import { LoginService } from "../Services/LoginService";
-import { ResponseStatus } from '../Services/Status'
-import { useHistory } from 'react-router-dom';
+import { ResponseStatus } from "../Services/Status";
+import { useHistory } from "react-router-dom";
+import SnackbarInfo from "../_components/SnakbarInfo";
 
 export default function Login() {
     const { register, handleSubmit, watch, errors } = useForm();
-    const history = useHistory(); 
-    const [openError,setOpenError] = useState(false);
-    const [errorMessage,setErrorMessage] = useState();
+    const history = useHistory();
+    const [openError, setOpenError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState();
 
     const onSubmit = (data) => {
         let service = new LoginService();
-        service.Login(data).then((res) => {
-            if (res == ResponseStatus.SUCCESS) {
-                history.push("dashboard") 
-            }else if (res.status == ResponseStatus.UNAUTHORIZED){
-                setErrorMessage(res.message);
+        service
+            .Login(data)
+            .then((res) => {
+                if (res == ResponseStatus.SUCCESS) {
+                    history.push("dashboard");
+                } else if (res.status == ResponseStatus.UNAUTHORIZED) {
+                    setErrorMessage(res.message);
+                    setOpenError(true);
+                }
+            })
+            .catch((error) => {
+                setErrorMessage(error);
                 setOpenError(true);
-            }
-        });
+            });
     };
 
     return (
@@ -59,14 +65,19 @@ export default function Login() {
                     <Link to="/restorePassword">
                         <TextButton>Forgot password</TextButton>
                     </Link>
-                    <Link to="/createAccount">
+                    <Link to="/createProfile">
                         <TextButton>Sign up</TextButton>
                     </Link>
                 </div>
             </div>
-            <Snackbar open={openError} autoHideDuration={5000} onClose={(() => {setOpenError(false);setErrorMessage("")})}>
-                <MuiAlert elevation={6} variant="filled" severity="error">{errorMessage}</MuiAlert>
-            </Snackbar>
+            <SnackbarInfo
+                isOpen={openError}
+                message={errorMessage}
+                onClose={() => {
+                    setOpenError(false);
+                    setErrorMessage("");
+                }}
+            />
         </div>
     );
 }

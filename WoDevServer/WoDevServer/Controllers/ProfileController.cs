@@ -29,7 +29,8 @@ namespace WoDevServer.Controllers
         }
 
         [HttpPost]
-        [Route("Create")]
+        [Route("create")]
+        [AllowAnonymous]
         public async Task<ActionResult> Create(ProfileCreate profileCreate)
         {
             try
@@ -37,12 +38,20 @@ namespace WoDevServer.Controllers
                 if (profileCreate == null)
                     return BadRequest();
 
-                var userId = HttpContext.User.Identity.Name;
+                var userIdentity = HttpContext.User.Identity.Name;
 
-                var profile = _mapper.Map<UserProfile>(profileCreate);
+                if (int.TryParse(userIdentity, out int userId))
+                {
+                    var user = await _userRepository.GetByIdAsync(userId);
+                    if (user == null)
+                    {
+                        return Unauthorized();
+                    }
 
-                await _profileRepository.CreateAsync(profile);
+                    var profile = _mapper.Map<UserProfile>(profileCreate);
 
+                    await _profileRepository.CreateAsync(profile);
+                }
                 return Ok();
             }
             catch (Exception e)
@@ -52,7 +61,7 @@ namespace WoDevServer.Controllers
         }
 
         [HttpPatch]
-        [Route("Update")]
+        [Route("update")]
         public async Task<ActionResult> Update(int id, JsonPatchDocument<ProfileCreate> patchDto)
         {
             try
