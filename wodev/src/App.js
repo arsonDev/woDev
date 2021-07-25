@@ -5,6 +5,7 @@ import Home from "./Home/Home.jsx";
 import PrivateRoute from "./_components/PrivateRoute";
 import ProfileTypeSelect from "./Profile/ProfileTypeSelect";
 import Profile from "./Profile/Profile";
+import SignIn from "./Login/SignIn";
 
 function App() {
     return (
@@ -13,8 +14,9 @@ function App() {
                 <PrivateRoute path="/dashboard" component={Home} exact />
                 <Route path="/login" component={Login} />
                 <Route path="/restorePassword" component={RestorePassword} exact />
-                <Route path="/createProfile" component={Profile} exact/>
-                <Redirect to="/dashboard"/>
+                <Route path="/createAccount" component={SignIn} exact/>
+                <Route path="/createAccount/createProfile" component={Profile} exact />
+                <Redirect to="/dashboard" />
             </Switch>
         </Router>
     );

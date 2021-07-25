@@ -8,6 +8,7 @@ export default function SnackbarInfo({ isOpen, errorMessage,onClose,severity = "
             open={isOpen}
             autoHideDuration={5000}
             onClose={onClose}>
+                {/* {errorMessage} */}
             <MuiAlert elevation={6} variant={variant} severity={severity}>
                 {errorMessage}
             </MuiAlert>

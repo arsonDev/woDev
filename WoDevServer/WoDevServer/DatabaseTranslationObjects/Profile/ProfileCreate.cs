@@ -4,13 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WoDevServer.Database.Model;
+using WoDevServer.DatabaseTranslationObjects.User;
 
 namespace WoDevServer.DatabaseTranslationObjects.Profile
 {
     public class ProfileCreate
     {
         [Required]
-        public int UserId { get; set; }
+        public UserCreate User { get; set; }
 
         [Required]
         public string Description { get; set; }

@@ -27,21 +27,4 @@ describe("Login form test", () => {
         expect(loginReq).toBeInTheDocument();
         expect(passwordReq).toBeInTheDocument();
     });
-
-    test("log in validation password to short", async () => {
-        const { getByText, getByPlaceholderText } = render(<BrowserRouter><Login /></BrowserRouter>);
-        fireEvent.change(getByPlaceholderText("Password"), { target: { value: "abcde" } });
-        act(() => {
-            fireEvent(
-                getByText("Log in"),
-                new MouseEvent("click", {
-                    bubbles: true,
-                    cancelable: true,
-                })
-            );
-        });
-
-        const password = await waitFor(() => getByText("Password is to short"));
-        expect(password).toBeInTheDocument();
-    });
 });

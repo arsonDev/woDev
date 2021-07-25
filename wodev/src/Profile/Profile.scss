@@ -23,3 +23,15 @@
     align-items: center;
     justify-content: center;
 }
+
+.datePickerStyle > .react-datepicker-wrapper{
+
+    width: max-content;
+    width: -moz-available;
+}
+
+.datePickerStyle {
+
+    width: max-content !important;
+    width: -moz-available !important;
+}

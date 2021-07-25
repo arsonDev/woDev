@@ -38,25 +38,20 @@ namespace WoDevServer.Controllers
                 if (profileCreate == null)
                     return BadRequest();
 
-                var userIdentity = HttpContext.User.Identity.Name;
+                if (profileCreate.User == null)
+                    return BadRequest();
 
-                if (int.TryParse(userIdentity, out int userId))
-                {
-                    var user = await _userRepository.GetByIdAsync(userId);
-                    if (user == null)
-                    {
-                        return Unauthorized();
-                    }
+                var profile = _mapper.Map<UserProfile>(profileCreate);
 
-                    var profile = _mapper.Map<UserProfile>(profileCreate);
-
-                    await _profileRepository.CreateAsync(profile);
-                }
+                await _userRepository.CreateAsync(profileCreate.User);
+                
+                await _profileRepository.CreateAsync(profile);
+                
                 return Ok();
             }
             catch (Exception e)
             {
-                return NotFound(new { e.Message, e.InnerException, e.StackTrace, e.Source });
+                return NotFound(e.Message);
             }
         }
 
@@ -86,5 +81,7 @@ namespace WoDevServer.Controllers
                 return NotFound(new { e.Message, e.InnerException, e.StackTrace, e.Source });
             }
         }
+
+
     }
 }
