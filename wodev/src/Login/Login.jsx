@@ -9,10 +9,10 @@ import Logo from "../Resources/Logo.png";
 import { LoginService } from "../Services/LoginService";
 import { ResponseStatus } from "../Services/Status";
 import { useHistory } from "react-router-dom";
-import SnackbarInfo from "../_components/SnakbarInfo";
+import SnackbarInfo from "../_components/SnackbarInfo";
 
 export default function Login() {
-    const { register, handleSubmit, watch, errors } = useForm();
+    const { register, handleSubmit, errors } = useForm();
     const history = useHistory();
     const [openError, setOpenError] = useState(false);
     const [errorMessage, setErrorMessage] = useState();
@@ -50,10 +50,9 @@ export default function Login() {
                             type="password"
                             placeholder="Password"
                             name="password"
-                            ref={register({ required: true, minLength: 8 })}
+                            ref={register({ required: true })}
                         />
                         {errors.password?.type === "required" && <ErrorMessage>Password is required</ErrorMessage>}
-                        {errors.password?.type === "minLength" && <ErrorMessage>Password is to short</ErrorMessage>}
                     </div>
                     <div className="horizontalGroup">
                         <Button variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>
@@ -65,7 +64,7 @@ export default function Login() {
                     <Link to="/restorePassword">
                         <TextButton>Forgot password</TextButton>
                     </Link>
-                    <Link to="/createProfile">
+                    <Link to="/createAccount">
                         <TextButton>Sign up</TextButton>
                     </Link>
                 </div>
