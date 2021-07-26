@@ -1,0 +1,9 @@
+.searchIcon {
+    width: 10%;
+    scale: 1.5;
+    transition: scale 0.2s;
+    &:hover{
+        scale: 2;
+        
+    }
+}

@@ -37,7 +37,6 @@ export default function Profile({ userId }) {
 
     return (
         <>
-            <TopBar />
             <div className="center">
                 <h3>Fill inputs and select type to complete create account</h3>
                 <div className="form-group centerGroup">

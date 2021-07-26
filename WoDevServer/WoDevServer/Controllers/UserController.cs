@@ -26,10 +26,12 @@ namespace WoDevServer.Controllers
         private readonly IUserRepository _repository;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private readonly IProfileRepository _profileRepository;
 
-        public UserController(IUserRepository repository, IMapper mapper, IOptions<AppSettings> appSettings)
+        public UserController(IUserRepository repository,IProfileRepository profileRepository, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _repository = repository;
+            _profileRepository = profileRepository;
             _mapper = mapper;
             _appSettings = appSettings.Value;
         }
@@ -125,11 +127,14 @@ namespace WoDevServer.Controllers
                 var token = tokenHandler.CreateToken(tokenDescripton);
                 var tokenString = tokenHandler.WriteToken(token);
 
+                var profile = _profileRepository.GetByUserAsync(user);
+
                 //TODO
                 var responseTokenInfo = new
                 {
                     Token = tokenString,
-                    Expires = tokenDescripton.Expires
+                    Expires = tokenDescripton.Expires,
+                    Profile = profile
                 };
                 return Ok(responseTokenInfo);
             }

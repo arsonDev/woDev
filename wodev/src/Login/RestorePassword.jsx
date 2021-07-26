@@ -35,7 +35,6 @@ export default function RestorePassword() {
     };
     return (
         <>
-            <TopBar />
             <div className="centerRestore">
                 <form name="resotrePassword" onSubmit={handleSubmit(onSubmit)}>
                     <h3>Enter Your email to send temporary password</h3>

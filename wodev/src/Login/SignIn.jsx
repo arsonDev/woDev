@@ -26,7 +26,6 @@ export default function SignIn() {
 
     return (
         <>
-            <TopBar />
             <div className="center">
                 <h3>Fill inputs and go to next step</h3>
 
