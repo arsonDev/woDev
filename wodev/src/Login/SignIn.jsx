@@ -7,6 +7,8 @@ import SnackbarInfo from "../_components/SnackbarInfo";
 import { CreateUser } from "../Services/UserService";
 import { useHistory } from "react-router";
 import { EmailChecker } from "./EmailChecker";
+import Logo from "../Resources/Logo.png";
+
 export default function SignIn() {
     const { register, handleSubmit, errors, watch } = useForm();
     const [errorMessage, setErrorMessage] = useState();
@@ -27,6 +29,8 @@ export default function SignIn() {
     return (
         <>
             <div className="center">
+            <img src={Logo} style={{width:'10%',height:'10%'}} alt="logo"></img>
+                
                 <h3>Fill inputs and go to next step</h3>
 
                 <br />

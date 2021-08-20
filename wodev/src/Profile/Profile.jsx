@@ -17,12 +17,12 @@ export default function Profile({ userId }) {
     const history = useHistory();
     const [startDate, setStartDate] = useState(null);
     const [errorMessage, setErrorMessage] = useState();
-    const [type, setType] = useState(ProfileTypeDict.worker);
+    const [type, setType] = useState(ProfileTypeDict.creator);
 
     function onSubmit(values) {
         let profileData = {
             ...values,
-            Type: type == ProfileTypeDict.employer ? 0 : 1,
+            Type: type == ProfileTypeDict.dev ? 0 : 1,
         };
 
         CreateAccount(profileData)
@@ -41,8 +41,8 @@ export default function Profile({ userId }) {
                 <h3>Fill inputs and select type to complete create account</h3>
                 <div className="form-group centerGroup">
                     <div className="centerType">
-                        <ProfileType profileType={ProfileTypeDict.worker} onClickEvent={() => setType(ProfileTypeDict.worker)} selected={type == ProfileTypeDict.worker} />
-                        <ProfileType profileType={ProfileTypeDict.employer} onClickEvent={() => setType(ProfileTypeDict.employer)} selected={type == ProfileTypeDict.employer} />
+                        <ProfileType profileType={ProfileTypeDict.creator} onClickEvent={() => setType(ProfileTypeDict.creator)} selected={type == ProfileTypeDict.creator} />
+                        <ProfileType profileType={ProfileTypeDict.dev} onClickEvent={() => setType(ProfileTypeDict.dev)} selected={type == ProfileTypeDict.dev} />
                     </div>
                     <input className="form-control form-control-lg input" type="text" placeholder="Name" name="Name" ref={register({ required: true })} />
                     {errors.Name?.type === "required" && <ErrorMessage>Name is required</ErrorMessage>}

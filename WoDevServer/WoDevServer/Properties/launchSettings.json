@@ -29,10 +29,8 @@
     },
     "Docker": {
       "commandName": "Docker",
+      "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
-      "environmentVariables": {
-        "DOCKER_HOST_IP": "host.docker.external"
-      },
       "publishAllPorts": true,
       "useSSL": true,
       "sslPort": 443

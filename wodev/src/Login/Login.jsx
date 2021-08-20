@@ -24,7 +24,7 @@ export default function Login() {
             .then((res) => {
                 if (res == ResponseStatus.SUCCESS) {
                     history.push("dashboard");
-                } else if (res.status == ResponseStatus.UNAUTHORIZED) {
+                } else {
                     setErrorMessage(res.message);
                     setOpenError(true);
                 }

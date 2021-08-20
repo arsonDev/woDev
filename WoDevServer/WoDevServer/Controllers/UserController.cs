@@ -1,20 +1,19 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using WoDevServer.Database.Repository;
-using WoDevServer.DatabaseTranslationObjects;
-using WoDevServer.DatabaseTranslationObjects.User;
-using WoDevServer.Database.Model;
-using WoDevServer.Helper;
-using Microsoft.EntityFrameworkCore;
 using WoDevServer.DatabaseTranslationObjects.Session;
-using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using Microsoft.Extensions.Options;
+using WoDevServer.DatabaseTranslationObjects.User;
+using WoDevServer.Models;
+using WoDevServer.Services;
 
 namespace WoDevServer.Controllers
 {
@@ -25,15 +24,17 @@ namespace WoDevServer.Controllers
     {
         private readonly IUserRepository _repository;
         private readonly IMapper _mapper;
-        private readonly AppSettings _appSettings;
+        private readonly JwtOptions _appSettings;
         private readonly IProfileRepository _profileRepository;
+        private readonly ITokenManager _tokenManager;
 
-        public UserController(IUserRepository repository,IProfileRepository profileRepository, IMapper mapper, IOptions<AppSettings> appSettings)
+        public UserController(IUserRepository repository, IProfileRepository profileRepository, IMapper mapper, IOptions<JwtOptions> appSettings, ITokenManager tokenManager)
         {
             _repository = repository;
             _profileRepository = profileRepository;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _tokenManager = tokenManager;
         }
 
         [HttpGet("{id}")]
@@ -117,7 +118,7 @@ namespace WoDevServer.Controllers
                     return BadRequest("User or password incorrect");
 
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var key = Encoding.ASCII.GetBytes(_appSettings.SecretKey);
                 var tokenDescripton = new SecurityTokenDescriptor()
                 {
                     Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, user.UserId.ToString()) }),
@@ -136,6 +137,9 @@ namespace WoDevServer.Controllers
                     Expires = tokenDescripton.Expires,
                     Profile = profile
                 };
+
+                _tokenManager.ActivateToken(tokenString);
+
                 return Ok(responseTokenInfo);
             }
             catch (Exception e)
@@ -157,6 +161,21 @@ namespace WoDevServer.Controllers
             catch (Exception e)
             {
                 return NotFound(new { e.Message, e.InnerException, e.StackTrace, e.Source });
+            }
+        }
+
+        [Route("logout")]
+        [HttpPost]
+        public async Task<ActionResult> Logout()
+        {
+            try
+            {
+                _tokenManager.DeactiveCurrentAsync();
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return NotFound();
             }
         }
     }

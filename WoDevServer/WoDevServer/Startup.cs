@@ -1,8 +1,11 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,11 +14,14 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WoDevServer.Database;
 using WoDevServer.Database.Repository;
-using WoDevServer.Helper;
+using WoDevServer.Middleware;
+using WoDevServer.Models;
+using WoDevServer.Services;
 
 namespace WoDevServer
 {
@@ -31,15 +37,18 @@ namespace WoDevServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<WodevContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection"))
             );
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
+            var appSettingsSection = Configuration.GetSection("Jwt");
+            services.Configure<JwtOptions>(appSettingsSection);
 
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-
+            var appSettings = appSettingsSection.Get<JwtOptions>();
+            services.AddMemoryCache();
+            //services.AddTransient<TokenManagerMiddleware>();
+            services.AddSingleton<ITokenManager, Services.TokenManager>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -50,22 +59,29 @@ namespace WoDevServer
                 {
                     OnTokenValidated = context =>
                     {
-                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-                        var userId = int.Parse(context.Principal.Identity.Name);
-                        var user = userService.GetByIdAsync(userId);
-                        if (user == null)
-                            context.Fail("Unathorized");
+                        
+                        var cache = context.HttpContext.RequestServices.GetRequiredService<IMemoryCache>();
+                        if (context.Request.Headers.TryGetValue("authorization",out Microsoft.Extensions.Primitives.StringValues t))
+                        {
+                            var searchedCache = t.ToString().Split(' ').AsEnumerable().Last();
+                            var cachedToken = cache.Get(searchedCache);
+                            if (cachedToken == null)
+                                context.Fail(new UnauthorizedAccessException());
+
+                        }
+
+
                         return Task.CompletedTask;
                     }
                 };
                 x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
                 x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidIssuer = appSettings.Issuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appSettings.SecretKey)),
+                    ValidateLifetime = true,
+                    ValidateAudience = false,
+                    ValidateIssuer = false
                 };
             });
 
@@ -79,6 +95,7 @@ namespace WoDevServer
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<IUserProfileTypeRepository, UserProfileTypeRepository>();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,9 +114,10 @@ namespace WoDevServer
             
             app.UseAuthentication();
             app.UseAuthorization();
+            //app.UseMiddleware<TokenManagerMiddleware>();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();            
+                endpoints.MapControllers();           
             });
         }
     }

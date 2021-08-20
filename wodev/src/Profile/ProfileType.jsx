@@ -4,8 +4,8 @@ import worker from "../Resources/worker.png";
 import employer from "../Resources/employer.png";
 
 export const ProfileTypeDict = {
-    worker: "Employee",
-    employer: "Employer",
+    creator: "Creator",
+    dev: "Dev",
 };
 
 export default function ProfileType({ profileType, selected, onClickEvent }) {
@@ -39,8 +39,8 @@ export default function ProfileType({ profileType, selected, onClickEvent }) {
 
     return (
         <Card onClick={onClickEvent} className={selected ? "selectedType" : ""}>
-            <h3>{profileType == ProfileTypeDict.worker ? ProfileTypeDict.worker : ProfileTypeDict.employer}</h3>
-            <img src={profileType == ProfileTypeDict.worker ? worker : employer} alt={profileType == ProfileTypeDict.worker ? ProfileTypeDict.worker : ProfileTypeDict.employer} />
+            <h3>{profileType == ProfileTypeDict.creator ? ProfileTypeDict.creator : ProfileTypeDict.dev}</h3>
+            <img src={profileType == ProfileTypeDict.creator ? worker : employer} alt={profileType == ProfileTypeDict.creator ? ProfileTypeDict.creator : ProfileTypeDict.dev} />
         </Card>
     );
 }
