@@ -12,6 +12,7 @@ namespace WoDevServer.Database.Model
         [Key]
         [Required]
         [Column("Id")]
+        [ForeignKey("User")]
         public int UserProfileId { get; set; }
 
         public virtual User User { get; set; }

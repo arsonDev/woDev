@@ -12,7 +12,7 @@ using WoDevServer.DatabaseTranslationObjects.Profile;
 
 namespace WoDevServer.Controllers
 {
-    [Route("api/profile")]
+    [Route("api/profile/")]
     [ApiController]
     [Authorize]
     public class ProfileController : Controller
@@ -30,7 +30,6 @@ namespace WoDevServer.Controllers
 
         [HttpPost]
         [Route("create")]
-        [AllowAnonymous]
         public async Task<ActionResult> Create(ProfileCreate profileCreate)
         {
             try

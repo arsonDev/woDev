@@ -1,14 +1,9 @@
-import Axios from 'axios';
+import { sendRequest } from "./CommonService";
 
-export class PasswordService{
-
-    ResetPassword = (data) => 
-        this.SendRequest("post","https://localhost/api/user/resetPassword",data).then(res => {
-            if (res.status == 200){
-                return true;
-            }
-            return false;
-        })
-
-    SendRequest = (method,url,data) => Axios.request({method,url,data});
-}
+export const ResetPassword = (data) =>
+    sendRequest("post", "https://localhost/api/user/resetPassword", data).then((res) => {
+        if (res.status == 200) {
+            return true;
+        }
+        return false;
+    });

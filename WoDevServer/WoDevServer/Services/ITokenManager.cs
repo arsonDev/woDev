@@ -9,8 +9,8 @@ namespace WoDevServer.Services
     {
         bool IsActiveAsync(string token);
         bool IsCurrentActiveToken();
-        void DeactiveCurrentAsync();
-        void DeactivateAsync(string token);
+        bool DeactiveCurrentAsync();
+        bool Deactivate(string token);
 
         void ActivateToken(string token);
     }

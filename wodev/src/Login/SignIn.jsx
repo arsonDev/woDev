@@ -17,7 +17,7 @@ export default function SignIn() {
     function onSubmit(values) {
         CreateUser({ Email: values.Email, Password: values.Password })
             .then(() => {
-                history.push("createAccount/createProfile");
+                history.push("/login");
             })
             .catch((err) => {
                 setErrorMessage(err.message);
@@ -28,9 +28,10 @@ export default function SignIn() {
 
     return (
         <>
+            <TopBar />
             <div className="center">
-            <img src={Logo} style={{width:'10%',height:'10%'}} alt="logo"></img>
-                
+                <img src={Logo} style={{ width: "10%", height: "10%" }} alt="logo"></img>
+
                 <h3>Fill inputs and go to next step</h3>
 
                 <br />
@@ -46,7 +47,7 @@ export default function SignIn() {
                         {errors.Email?.type === "required" && <ErrorMessage>Email is required</ErrorMessage>}
                         {errors.Email?.type === "pattern" && <ErrorMessage>Email is invalid</ErrorMessage>}
 
-                        <EmailChecker email={watch("Email")}/>
+                        <EmailChecker email={watch("Email")} />
                     </div>
 
                     <input className="form-control form-control-lg input" type="password" placeholder="Password" name="Password" ref={register({ required: true, minLength: 8 })} />

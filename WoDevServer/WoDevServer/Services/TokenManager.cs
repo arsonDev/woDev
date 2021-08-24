@@ -23,10 +23,21 @@ namespace WoDevServer.Services
             _jwtOptions = jwtOptions;
         }
 
-        public void DeactivateAsync(string token) =>
-            _cache.Remove(token);
+        public bool Deactivate(string token)
+        {
+            try
+            {
+                _cache.Remove(token);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
 
-        public void DeactiveCurrentAsync() => DeactivateAsync(GetCurrentAsync());
+        }
+
+        public bool DeactiveCurrentAsync() => Deactivate(GetCurrentAsync());
 
         public bool IsActiveAsync(string token) => _cache.Get(token) != null;
 

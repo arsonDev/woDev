@@ -27,7 +27,6 @@ export default function Profile({ userId }) {
 
         CreateAccount(profileData)
             .then((res) => {
-                //tutaj zrobic login ponowny i dac token do localStorage
                 history.push("/dashboard");
             })
             .catch((err) => {
@@ -37,6 +36,7 @@ export default function Profile({ userId }) {
 
     return (
         <>
+            <TopBar />
             <div className="center">
                 <h3>Fill inputs and select type to complete create account</h3>
                 <div className="form-group centerGroup">
@@ -70,7 +70,14 @@ export default function Profile({ userId }) {
                     />
                     {errors.phone?.type === "required" && <ErrorMessage>Phone is required</ErrorMessage>}
                     {errors.phone?.type === "pattern" && <ErrorMessage>Phone is invalid</ErrorMessage>}
-                    <textarea className="form-control form-control-lg input " style={{maxHeight:'300px', minHeight : '100px'}} type="text" placeholder="Description" name="Description" ref={register} />
+                    <textarea
+                        className="form-control form-control-lg input "
+                        style={{ maxHeight: "300px", minHeight: "100px" }}
+                        type="text"
+                        placeholder="Description"
+                        name="Description"
+                        ref={register}
+                    />
                     <Button variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>
                         Create a account
                     </Button>

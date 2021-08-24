@@ -46,7 +46,7 @@ namespace WoDevServer
 
             var appSettings = appSettingsSection.Get<JwtOptions>();
             services.AddMemoryCache();
-            //services.AddTransient<TokenManagerMiddleware>();
+            services.AddTransient<TokenManagerMiddleware>();
             services.AddSingleton<ITokenManager, Services.TokenManager>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddAuthentication(x =>
@@ -63,7 +63,7 @@ namespace WoDevServer
                         var cache = context.HttpContext.RequestServices.GetRequiredService<IMemoryCache>();
                         if (context.Request.Headers.TryGetValue("authorization",out Microsoft.Extensions.Primitives.StringValues t))
                         {
-                            var searchedCache = t.ToString().Split(' ').AsEnumerable().Last();
+                            var searchedCache = t.Single().Split(' ').AsEnumerable().Last();
                             var cachedToken = cache.Get(searchedCache);
                             if (cachedToken == null)
                                 context.Fail(new UnauthorizedAccessException());
@@ -95,6 +95,13 @@ namespace WoDevServer
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<IUserProfileTypeRepository, UserProfileTypeRepository>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+
+                     builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
+
+            });
            
         }
 
@@ -109,16 +116,16 @@ namespace WoDevServer
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseRouting();
-            
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
-            //app.UseMiddleware<TokenManagerMiddleware>();
+            app.UseMiddleware<TokenManagerMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();           
             });
+            
         }
     }
 }

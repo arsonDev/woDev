@@ -6,10 +6,11 @@ import { ErrorMessage } from "../Utils/ErrorMessage";
 import { TextButton } from "../Utils/TextButton";
 import { Link, Redirect } from "react-router-dom";
 import Logo from "../Resources/Logo.png";
-import { LoginService } from "../Services/LoginService";
 import { ResponseStatus } from "../Services/Status";
 import { useHistory } from "react-router-dom";
 import SnackbarInfo from "../_components/SnackbarInfo";
+import {Login as LoginMethod} from '../Services/LoginService'
+import { TopBar } from "../Utils/TopBar";
 
 export default function Login() {
     const { register, handleSubmit, errors } = useForm();
@@ -18,12 +19,12 @@ export default function Login() {
     const [errorMessage, setErrorMessage] = useState();
 
     const onSubmit = (data) => {
-        let service = new LoginService();
-        service
-            .Login(data)
+        LoginMethod(data)
             .then((res) => {
                 if (res == ResponseStatus.SUCCESS) {
-                    history.push("dashboard");
+                    history.push("/dashboard");
+                } else if (res == ResponseStatus.FIRST_LOGIN) {
+                    history.push("/createAccount/createProfile");
                 } else {
                     setErrorMessage(res.message);
                     setOpenError(true);
@@ -36,6 +37,8 @@ export default function Login() {
     };
 
     return (
+        <>
+        <TopBar/>
         <div className="center">
             <h2 style={{ marginTop: "10vh" }}>Welcome on</h2>
             <img src={Logo} className="logoSize" alt=""></img>
@@ -45,13 +48,7 @@ export default function Login() {
                     <div className="form-group">
                         <input className="form-control form-control-lg input" type="text" placeholder="Login" name="login" ref={register({ required: true })} />
                         {errors.login?.type === "required" && <ErrorMessage>Login is required</ErrorMessage>}
-                        <input
-                            className="form-control form-control-lg input"
-                            type="password"
-                            placeholder="Password"
-                            name="password"
-                            ref={register({ required: true })}
-                        />
+                        <input className="form-control form-control-lg input" type="password" placeholder="Password" name="password" ref={register({ required: true })} />
                         {errors.password?.type === "required" && <ErrorMessage>Password is required</ErrorMessage>}
                     </div>
                     <div className="horizontalGroup">
@@ -78,5 +75,6 @@ export default function Login() {
                 }}
             />
         </div>
+        </>
     );
 }

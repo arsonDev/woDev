@@ -1,14 +1,15 @@
 import Axios from "axios";
 
-export const SendRequest = (method, url, data) => Axios.request({ method, url, data });
+export const sendRequest = (method, url, data) => Axios.request({ method, url, data });
 
 export const authHeader = () => {
-    let tokenObject = JSON.parse(localStorage.getItem("token"));
-    if (tokenObject && tokenObject.Token && (new Date(tokenObject.expires).toLocaleString() > new Date(Date.now()).toLocaleString())) {
-        return {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + tokenObject.Token,
-        };
+    let tokenObject = JSON.parse(localStorage.getItem("user"));
+    if (tokenObject && tokenObject.token) {
+        return tokenObject.token;
+        // return {
+        //     "authorization": tokenObject.Token,
+        //     "Content-type": "application/json; charset=UTF-8",
+        // };
     } else {
         return {};
     }

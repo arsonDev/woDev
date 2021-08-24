@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./RestorePassword.scss";
 import { ErrorMessage } from "../Utils/ErrorMessage";
-import { PasswordService } from "../Services/PasswordService";
+import { ResetPassword } from "../Services/PasswordService";
 import { useHistory } from "react-router-dom";
 import { TopBar } from "../Utils/TopBar";
 
@@ -15,9 +15,7 @@ export default function RestorePassword() {
     const history = useHistory();
 
     const onSubmit = (data) => {
-        let service = new PasswordService();
-        service
-            .ResetPassword(data)
+        ResetPassword(data)
             .then((res) => {
                 if (res == true) {
                     setMessage("New password was send to Your email");
@@ -35,6 +33,7 @@ export default function RestorePassword() {
     };
     return (
         <>
+            <TopBar />
             <div className="centerRestore">
                 <form name="resotrePassword" onSubmit={handleSubmit(onSubmit)}>
                     <h3>Enter Your email to send temporary password</h3>

@@ -170,12 +170,15 @@ namespace WoDevServer.Controllers
         {
             try
             {
-                _tokenManager.DeactiveCurrentAsync();
-                return NoContent();
+                var response = _tokenManager.DeactiveCurrentAsync();
+                if (response)
+                    return NoContent();
+
+                return BadRequest("Unathorized");
             }
             catch (Exception e)
             {
-                return NotFound();
+                return BadRequest(e);
             }
         }
     }

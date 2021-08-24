@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import Logo from "../Resources/Logo.png";
 import { UserTopMenu } from "../User/UserTopMenu";
 
@@ -8,7 +8,11 @@ export const TopBar = () => {
     const history = useHistory();
 
     function logoClick() {
-        history.push("dashboard");
+        history.push("/dashboard");
+    }
+
+    function backToLogin() {
+        history.push("/login");
     }
 
     const [profileExists, setProfileExists] = useState(false);

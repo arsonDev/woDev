@@ -34,5 +34,7 @@ namespace WoDevServer.Database.Model
         [Required]
         [Column("Active")]
         public bool Active { get; set; } = true;
+
+        public virtual UserProfile UserProfile { get; set; }
     }
 }

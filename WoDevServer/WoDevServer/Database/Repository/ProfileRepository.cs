@@ -28,7 +28,7 @@ namespace WoDevServer.Database.Repository
 
         public UserProfile GetByUserAsync(User user)
         {
-            return _context.UserProfile.FirstOrDefault(x => x.User == user);
+            return _context.UserProfile.FirstOrDefault(x => x.User.UserId == user.UserId);
         }
 
         public async Task Remove(UserProfile data)

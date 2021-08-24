@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect, useHistory } from "react-router-dom";
 import Login from "./Login/Login";
 import RestorePassword from "./Login/RestorePassword";
 import Home from "./Home/Home.jsx";
@@ -9,11 +9,8 @@ import SignIn from "./Login/SignIn";
 import { TopBar } from "./Utils/TopBar";
 
 function App() {
-    
-
     return (
         <>
-            <TopBar/>
             <Router>
                 <Switch>
                     <PrivateRoute path="/dashboard" component={Home} exact />
