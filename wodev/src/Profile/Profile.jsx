@@ -19,10 +19,13 @@ export default function Profile({ userId }) {
     const [errorMessage, setErrorMessage] = useState();
     const [type, setType] = useState(ProfileTypeDict.creator);
 
+    const user = JSON.parse(localStorage.getItem('user'));
+
     function onSubmit(values) {
         let profileData = {
             ...values,
             Type: type == ProfileTypeDict.dev ? 0 : 1,
+            UserId : user.userId
         };
 
         CreateAccount(profileData)

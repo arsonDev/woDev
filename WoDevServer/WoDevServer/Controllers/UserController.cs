@@ -133,6 +133,7 @@ namespace WoDevServer.Controllers
                 //TODO
                 var responseTokenInfo = new
                 {
+                    UserId = user.UserId,
                     Token = tokenString,
                     Expires = tokenDescripton.Expires,
                     Profile = profile

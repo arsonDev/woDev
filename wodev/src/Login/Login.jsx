@@ -24,6 +24,7 @@ export default function Login() {
                 if (res == ResponseStatus.SUCCESS) {
                     history.push("/dashboard");
                 } else if (res == ResponseStatus.FIRST_LOGIN) {
+
                     history.push("/createAccount/createProfile");
                 } else {
                     setErrorMessage(res.message);

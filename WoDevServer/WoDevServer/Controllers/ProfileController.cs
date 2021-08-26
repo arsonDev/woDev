@@ -37,12 +37,11 @@ namespace WoDevServer.Controllers
                 if (profileCreate == null)
                     return BadRequest();
 
-                if (profileCreate.User == null)
+                if (profileCreate.UserId <= 0)
                     return BadRequest();
 
                 var profile = _mapper.Map<UserProfile>(profileCreate);
 
-                await _userRepository.CreateAsync(profileCreate.User);
                 
                 await _profileRepository.CreateAsync(profile);
                 

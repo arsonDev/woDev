@@ -56,6 +56,7 @@ namespace WoDevServer.Database
                 entity.HasKey(entity => entity.Id);
                 entity.HasIndex(indexExpression => indexExpression.Id).IsUnique(true);
             });
+
         }
     }
 }

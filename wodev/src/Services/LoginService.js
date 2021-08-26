@@ -11,7 +11,7 @@ export const Login = (data) =>
             if (res.status == 200 && res.data) {
                 let userData = JSON.stringify(res.data);
                 localStorage.setItem("user", userData);
-                if (userData?.profile) {
+                if (res.data?.profile) {
                     return ResponseStatus.SUCCESS;
                 }
                 return ResponseStatus.FIRST_LOGIN;
@@ -39,27 +39,8 @@ export const logoutMethod = async () => {
     let res = await axios
         .post(`${BaseURL}/user/logout`, null, {
             headers: {
-                // "Content-Type": "application/json",
                 Authorization: `Bearer ${head}`,
-                // 'www-authenticate' : head
-                // 'Accept' : '*/*',
-                // Connection : 'keep-alive',
-                // 'Accept-Encoding': 'gzip, deflate, br'
             },
-
-            // axios({
-            //     method: "post",
-            //     url: `${BaseURL}/user/logout`,
-            //     config: {
-            //         headers: {
-            //             // "Content-Type": "application/json",
-            //             Authorization: 'Bearer '+head,
-            //             'www-authenticate' : head
-            //             // 'Accept' : '*/*',
-            //             // Connection : 'keep-alive',
-            //             // 'Accept-Encoding': 'gzip, deflate, br'
-            //         },
-            //     },
         })
         .then((res) => {
             if (res.status == 204) {
