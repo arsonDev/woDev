@@ -145,7 +145,7 @@ namespace WoDevServer.Controllers
             }
             catch (Exception e)
             {
-                return Conflict("Dane są niprawidłowe lub użytkownik nie istnieje");
+                return Conflict("Dane są nieprawidłowe lub użytkownik nie istnieje");
             }
         }
 
