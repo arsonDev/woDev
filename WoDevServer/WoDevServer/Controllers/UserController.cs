@@ -49,7 +49,7 @@ namespace WoDevServer.Controllers
             }
             catch (Exception e)
             {
-                return NotFound(new { e.Message, e.InnerException, e.StackTrace, e.Source });
+                return StatusCode(500,new { e.Message, e.InnerException, e.StackTrace, e.Source });
             }
         }
 
@@ -68,7 +68,7 @@ namespace WoDevServer.Controllers
 
                 var userFromDb = await _repository.GetByEmailAsync(userCreate.Email);
                 if (userCreate == null)
-                    return NotFound("Could not create a user");
+                    return NotFound(new { Error = "Could not create a user" });
 
                 return Created(nameof(CreateUser), _mapper.Map<UserRead>(userFromDb));
             }
@@ -78,7 +78,7 @@ namespace WoDevServer.Controllers
             }
             catch (Exception e)
             {
-                return NotFound(new { e.Message, e.InnerException, e.StackTrace, e.Source });
+                return StatusCode(500,new { e.Message, e.InnerException, e.StackTrace, e.Source });
             }
         }
 

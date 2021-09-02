@@ -21,7 +21,8 @@ namespace WoDevServer
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://*:" + Environment.GetEnvironmentVariable("PORT"));
+                    if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PORT")))
+                        webBuilder.UseUrls("http://*:" + Environment.GetEnvironmentVariable("PORT"));
                 });
     }
 }

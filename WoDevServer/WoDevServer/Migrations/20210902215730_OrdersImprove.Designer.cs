@@ -10,16 +10,81 @@ using WoDevServer.Database;
 namespace WoDevServer.Migrations
 {
     [DbContext(typeof(WodevContext))]
-    [Migration("20210820085235_UserToProfileRelationshipImprove")]
-    partial class UserToProfileRelationshipImprove
+    [Migration("20210902215730_OrdersImprove")]
+    partial class OrdersImprove
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.1");
+                .HasAnnotation("ProductVersion", "5.0.9")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("WoDevServer.Database.Model.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CreateUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReqFunc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReqNoFunc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Technology")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("WorkingUserUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkingUserUserId");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("WoDevServer.Database.Model.OrderFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileData")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderFile");
+                });
 
             modelBuilder.Entity("WoDevServer.Database.Model.ProfileTech", b =>
                 {
@@ -27,7 +92,7 @@ namespace WoDevServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("Id")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("TechnologyId")
                         .HasColumnType("int");
@@ -53,7 +118,7 @@ namespace WoDevServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("Id")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<byte[]>("Logo")
                         .IsRequired()
@@ -77,7 +142,7 @@ namespace WoDevServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("Id")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit")
@@ -124,8 +189,10 @@ namespace WoDevServer.Migrations
             modelBuilder.Entity("WoDevServer.Database.Model.UserProfile", b =>
                 {
                     b.Property<int>("UserProfileId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -158,7 +225,13 @@ namespace WoDevServer.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("UserProfileId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Profile");
                 });
@@ -169,7 +242,7 @@ namespace WoDevServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("Id")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -180,6 +253,24 @@ namespace WoDevServer.Migrations
                         .IsUnique();
 
                     b.ToTable("UserProfileType");
+                });
+
+            modelBuilder.Entity("WoDevServer.Database.Model.Order", b =>
+                {
+                    b.HasOne("WoDevServer.Database.Model.User", "WorkingUser")
+                        .WithMany("UserOrders")
+                        .HasForeignKey("WorkingUserUserId");
+
+                    b.Navigation("WorkingUser");
+                });
+
+            modelBuilder.Entity("WoDevServer.Database.Model.OrderFile", b =>
+                {
+                    b.HasOne("WoDevServer.Database.Model.Order", "Order")
+                        .WithMany("Files")
+                        .HasForeignKey("OrderId");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("WoDevServer.Database.Model.ProfileTech", b =>
@@ -201,15 +292,22 @@ namespace WoDevServer.Migrations
                 {
                     b.HasOne("WoDevServer.Database.Model.User", "User")
                         .WithOne("UserProfile")
-                        .HasForeignKey("WoDevServer.Database.Model.UserProfile", "UserProfileId")
+                        .HasForeignKey("WoDevServer.Database.Model.UserProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("WoDevServer.Database.Model.Order", b =>
+                {
+                    b.Navigation("Files");
+                });
+
             modelBuilder.Entity("WoDevServer.Database.Model.User", b =>
                 {
+                    b.Navigation("UserOrders");
+
                     b.Navigation("UserProfile");
                 });
 #pragma warning restore 612, 618

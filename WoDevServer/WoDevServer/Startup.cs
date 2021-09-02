@@ -38,10 +38,14 @@ namespace WoDevServer
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<WodevContext>(options =>
-                options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE"))
-            );
             
+                services.AddDbContext<WodevContext>(options =>
+                                    options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
+            
+                //services.AddDbContext<WodevContext>(options =>
+                //    options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE")));
+            
+
             var appSettingsSection = Configuration.GetSection("Jwt");
             services.Configure<JwtOptions>(appSettingsSection);
 
@@ -95,6 +99,7 @@ namespace WoDevServer
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<IUserProfileTypeRepository, UserProfileTypeRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>
@@ -108,16 +113,12 @@ namespace WoDevServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WoDevServer v1"));
-            //    DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
-            //    defaultFilesOptions.DefaultFileNames.Clear();
-            //    defaultFilesOptions.DefaultFileNames.Add("Index.html");
-
-            //app.UseDefaultFiles(defaultFilesOptions);
-            //app.UseStaticFiles();
-
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WoDevServer v1"));
+            }
 
             app.UseHttpsRedirection();
             app.UseRouting();

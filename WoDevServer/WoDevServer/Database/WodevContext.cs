@@ -8,6 +8,7 @@ namespace WoDevServer.Database
         public WodevContext(DbContextOptions<WodevContext> options) : base(options)
         {
             this.Database.EnsureCreated();
+            this.Database.Migrate();
         }
 
         public DbSet<User> User { get; set; }
@@ -15,6 +16,9 @@ namespace WoDevServer.Database
         public DbSet<Technology> Technology { get; set; }
         public DbSet<ProfileTech> ProfileTech { get; set; }
         public DbSet<UserProfileType> UserProfileType { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderFile> OrderFiles { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

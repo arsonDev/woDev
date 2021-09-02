@@ -49,7 +49,7 @@ namespace WoDevServer.Controllers
             }
             catch (Exception e)
             {
-                return NotFound(e.Message);
+                return StatusCode(500, new { e.Message, e.InnerException, e.StackTrace, e.Source });
             }
         }
 
@@ -76,7 +76,7 @@ namespace WoDevServer.Controllers
             }
             catch (Exception e)
             {
-                return NotFound(new { e.Message, e.InnerException, e.StackTrace, e.Source });
+                return StatusCode(500, new { e.Message, e.InnerException, e.StackTrace, e.Source });
             }
         }
 

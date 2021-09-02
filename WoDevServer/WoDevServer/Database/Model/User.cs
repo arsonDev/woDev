@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -36,5 +37,7 @@ namespace WoDevServer.Database.Model
         public bool Active { get; set; } = true;
 
         public virtual UserProfile UserProfile { get; set; }
+
+        public virtual ICollection<Order> UserOrders { get; set; }
     }
 }
