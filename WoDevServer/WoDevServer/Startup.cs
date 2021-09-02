@@ -39,8 +39,9 @@ namespace WoDevServer
         {
 
             services.AddDbContext<WodevContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection"))
+                options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE"))
             );
+            
             var appSettingsSection = Configuration.GetSection("Jwt");
             services.Configure<JwtOptions>(appSettingsSection);
 
@@ -59,9 +60,9 @@ namespace WoDevServer
                 {
                     OnTokenValidated = context =>
                     {
-                        
+
                         var cache = context.HttpContext.RequestServices.GetRequiredService<IMemoryCache>();
-                        if (context.Request.Headers.TryGetValue("authorization",out Microsoft.Extensions.Primitives.StringValues t))
+                        if (context.Request.Headers.TryGetValue("authorization", out Microsoft.Extensions.Primitives.StringValues t))
                         {
                             var searchedCache = t.Single().Split(' ').AsEnumerable().Last();
                             var cachedToken = cache.Get(searchedCache);
@@ -85,7 +86,6 @@ namespace WoDevServer
                 };
             });
 
-            services.AddControllers();
             services.AddControllers().AddNewtonsoftJson(setting => setting.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
             services.AddSwaggerGen(c =>
             {
@@ -102,18 +102,22 @@ namespace WoDevServer
                      builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
 
             });
-           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WoDevServer v1"));
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WoDevServer v1"));
+            //    DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
+            //    defaultFilesOptions.DefaultFileNames.Clear();
+            //    defaultFilesOptions.DefaultFileNames.Add("Index.html");
+
+            //app.UseDefaultFiles(defaultFilesOptions);
+            //app.UseStaticFiles();
+
 
             app.UseHttpsRedirection();
             app.UseRouting();
@@ -123,9 +127,8 @@ namespace WoDevServer
             app.UseMiddleware<TokenManagerMiddleware>();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();           
+                endpoints.MapControllers();
             });
-            
         }
     }
 }

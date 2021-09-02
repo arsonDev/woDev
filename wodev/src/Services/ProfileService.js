@@ -1,11 +1,12 @@
 import axios from "axios";
 import Axios from "axios";
+import { BaseURL } from ".";
 import { authHeader, sendRequest } from "./CommonService";
 
 export const CreateAccount = (data) => {
     let head = authHeader();
     return axios
-        .post("https://localhost/api/profile/create", data, {
+        .post(`${BaseURL}/profile/create`, data, {
             headers: {
                 Authorization: `Bearer ${head}`,
             },

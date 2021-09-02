@@ -5,9 +5,10 @@
     flex-direction: column;
 }
 
-
-.loginForm{
-    width: 30vw;
+@media (min-width: 1100px){
+    .loginForm{
+        width: 30vw;
+    }
 }
 
 .fullWidth{

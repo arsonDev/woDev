@@ -46,7 +46,7 @@ export default function RestorePassword() {
                     />
                     {errors.email?.type === "pattern" && <ErrorMessage>Email is invalid</ErrorMessage>}
                     {errors.email?.type === "required" && <ErrorMessage>Email is required</ErrorMessage>}
-                    <div>
+                    <div className="horizontalGroup">
                         <Button type="submit" variant="contained" color="primary">
                             Send
                         </Button>
