@@ -576,3 +576,5 @@ WodevServer/WodevServer/obj/
 *.cache
 /WoDevServer/WoDevServer/obj/
 /WoDevServer/WoDevServer/obj/
+/WoDevServer/WoDevServer/obj/
+/WoDevServer/.vs/
