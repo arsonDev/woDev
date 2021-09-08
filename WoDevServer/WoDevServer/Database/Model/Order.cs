@@ -16,6 +16,12 @@ namespace WoDevServer.Database.Model
         public int Id { get; set; }
 
         [Required]
+        public string Type { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
         public string ReqFunc { get; set; }
 
         [Required]
@@ -23,6 +29,9 @@ namespace WoDevServer.Database.Model
 
         [Required]
         public string Technology { get; set; }
+
+        [Required]
+        public DateTime DeadLine { get; set; } = DateTime.Now.AddDays(7);
 
         public virtual User WorkingUser { get; set; }
 

@@ -32,11 +32,10 @@ export default function SignIn() {
             <div className="center">
                 <img src={Logo} style={{ width: "10%", height: "10%" }} alt="logo"></img>
 
-                <h3>Fill inputs and go to next step</h3>
+                <h3>Uzupełnij pola i przejdź dalej</h3>
 
                 <br />
                 <div className="form-group centerGroup">
-                    <div className="row">
                         <input
                             className="form-control form-control-lg input"
                             type="text"
@@ -44,15 +43,14 @@ export default function SignIn() {
                             name="Email"
                             ref={register({ required: true, pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i })}
                         />
-                        {errors.Email?.type === "required" && <ErrorMessage>Email is required</ErrorMessage>}
-                        {errors.Email?.type === "pattern" && <ErrorMessage>Email is invalid</ErrorMessage>}
+                        {errors.Email?.type === "required" && <ErrorMessage>Email jest wymagany</ErrorMessage>}
+                        {errors.Email?.type === "pattern" && <ErrorMessage>Email jest nieprawidłowy</ErrorMessage>}
 
                         <EmailChecker email={watch("Email")} />
-                    </div>
 
-                    <input className="form-control form-control-lg input" type="password" placeholder="Password" name="Password" ref={register({ required: true, minLength: 8 })} />
-                    {errors.Password?.type === "required" && <ErrorMessage>Password is required</ErrorMessage>}
-                    {errors.Password?.type === "minLength" && <ErrorMessage>Password is to short</ErrorMessage>}
+                    <input className="form-control form-control-lg input" type="password" placeholder="Hasło" name="Password" ref={register({ required: true, minLength: 8 })} />
+                    {errors.Password?.type === "required" && <ErrorMessage>Hasło jest wymagane</ErrorMessage>}
+                    {errors.Password?.type === "minLength" && <ErrorMessage>Hasło jest za krótkie</ErrorMessage>}
 
                     <input
                         className="form-control form-control-lg input"
@@ -61,9 +59,9 @@ export default function SignIn() {
                         name="RepeatPassword"
                         ref={register({ required: true, minLength: 8, validate: isTheSame })}
                     />
-                    {errors.RepeatPassword?.type === "required" && <ErrorMessage>Password is required</ErrorMessage>}
-                    {errors.RepeatPassword?.type === "minLength" && <ErrorMessage>Password is to short</ErrorMessage>}
-                    {errors.RepeatPassword?.type === "validate" && <ErrorMessage>Passwords are not the same</ErrorMessage>}
+                    {errors.RepeatPassword?.type === "required" && <ErrorMessage>Hasło jest wymagane</ErrorMessage>}
+                    {errors.RepeatPassword?.type === "minLength" && <ErrorMessage>Hasło jest za krótkie</ErrorMessage>}
+                    {errors.RepeatPassword?.type === "validate" && <ErrorMessage>Hasło nie jest takie samo</ErrorMessage>}
 
                     <br />
                     <br />

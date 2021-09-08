@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WoDevServer.Models;
@@ -39,15 +40,17 @@ namespace WoDevServer.Services
 
         public bool DeactiveCurrentAsync() => Deactivate(GetCurrentAsync());
 
-        public bool IsActiveAsync(string token) => _cache.Get(token) != null;
+        private bool IsActiveAsync(string token) => _cache.Get(token) != null;
 
         public bool IsCurrentActiveToken() => IsActiveAsync(GetCurrentAsync());
 
-        public void ActivateToken(string token) =>
+        public void ActivateToken(string token)
+        {
             _cache.Set(token, new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_jwtOptions.Value.ExpiryMinutes)
             });
+        }
 
         private string GetCurrentAsync()
         {
@@ -55,5 +58,10 @@ namespace WoDevServer.Services
             return authHeader == Microsoft.Extensions.Primitives.StringValues.Empty ? string.Empty : authHeader.Single().Split(" ").Last();
         }
 
+        public void IncreaseValid()
+        {
+            if (IsCurrentActiveToken())
+                ActivateToken(GetCurrentAsync());
+        }
     }
 }

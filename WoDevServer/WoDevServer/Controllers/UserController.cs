@@ -122,7 +122,7 @@ namespace WoDevServer.Controllers
                 var tokenDescripton = new SecurityTokenDescriptor()
                 {
                     Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, user.UserId.ToString()) }),
-                    Expires = DateTime.Now.AddHours(4),
+                    Expires = DateTime.Now.AddMinutes(_appSettings.ExpiryMinutes),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescripton);

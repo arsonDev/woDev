@@ -18,16 +18,16 @@ export default function RestorePassword() {
         ResetPassword(data)
             .then((res) => {
                 if (res == true) {
-                    setMessage("New password was send to Your email");
+                    setMessage("Nowe hasło zostało wyłane na twój email");
                     setOpenAlert(true);
                     history.push("login");
                 } else {
-                    setMessage("We have problem, contact with admin");
+                    setMessage("Skontaktuj się z adminem");
                     setOpenAlert(true);
                 }
             })
             .catch((err) => {
-                setMessage(`We have problem, contact with admin: ${err}`);
+                setMessage(`Skontaktuj się z adminem: ${err}`);
                 setOpenAlert(true);
             });
     };
@@ -36,7 +36,7 @@ export default function RestorePassword() {
             <TopBar />
             <div className="centerRestore">
                 <form name="resotrePassword" onSubmit={handleSubmit(onSubmit)}>
-                    <h3>Enter Your email to send temporary password</h3>
+                    <h3>Wprowadź email aby wysłać hasło tymczasowe</h3>
                     <input
                         type="text"
                         name="email"
@@ -44,11 +44,11 @@ export default function RestorePassword() {
                         className="form-control form-control-lg input"
                         ref={register({ required: true, pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i })}
                     />
-                    {errors.email?.type === "pattern" && <ErrorMessage>Email is invalid</ErrorMessage>}
-                    {errors.email?.type === "required" && <ErrorMessage>Email is required</ErrorMessage>}
+                    {errors.email?.type === "pattern" && <ErrorMessage>Email jest nieprawidłowy</ErrorMessage>}
+                    {errors.email?.type === "required" && <ErrorMessage>Email jest wymagany</ErrorMessage>}
                     <div className="horizontalGroup">
                         <Button type="submit" variant="contained" color="primary">
-                            Send
+                            Wyślij
                         </Button>
                     </div>
                 </form>

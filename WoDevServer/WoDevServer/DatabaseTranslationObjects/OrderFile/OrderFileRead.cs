@@ -8,10 +8,8 @@ namespace WoDevServer.DatabaseTranslationObjects.OrderFile
 {
     public class OrderFileRead
     {
-        [Required]
         public string Data { get; set; }
-        
-        [Required]
+
         public string Name { get; set; }
     }
 }

@@ -2,14 +2,16 @@ import { Box, Button, ButtonBase, Container, Grid, Modal } from "@material-ui/co
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { GrClose } from "react-icons/gr";
-import { saveOrder } from "../../Services/OrderService";
+import { saveOrder, updateOrder } from "../../Services/OrderService";
 import { ErrorMessage } from "../../Utils/ErrorMessage";
+import { useOrders } from "../../_context/orderContext";
 import "./CreateOrder.scss";
 
-export const CreateOrder = ({ onCloseCallback, editMode = false }) => {
-    const { register, handleSubmit, errors } = useForm();
+export const CreateOrder = ({ onCloseCallback, editMode = false, item = {} }) => {
+    const { register, handleSubmit, errors } = useForm({ defaultValues: { ...item, Files: "" } });
+    const { setFetchData } = useOrders();
 
-    const [fileList, setFileList] = useState([]);
+    const [fileList, setFileList] = useState(item?.Files ?? []);
 
     const readFile = (file) =>
         new Promise((resolve, reject) => {
@@ -37,41 +39,76 @@ export const CreateOrder = ({ onCloseCallback, editMode = false }) => {
         });
     };
 
-    const submit = (data) => {
-        saveOrder({ ...data, files: fileList });
+    const submit = async (data) => {
+        let user = JSON.parse(localStorage.getItem("user"));
+        if (editMode) {
+            await updateOrder({...data, Files: fileList },item.Id).then((res) => {
+                alert("Zlecenie zaktualizowane");
+                setFetchData(true);
+                onCloseCallback();
+            }).catch((err) => {
+                alert(err);
+            });;
+        } else {
+            await saveOrder({
+                ...item,
+                ...data,
+                Files: fileList,
+                CreateUserId: user.userId,
+            })
+                .then((res) => {
+                    alert("Zlecenie utworzone");
+                    onCloseCallback();
+                })
+                .catch((err) => {
+                    alert(err);
+                });
+        }
     };
 
     return (
         <>
-            <Modal style={{ margin: "100px" }} open onClose={onCloseCallback} aria-labelledby="Stwórz zlecenie">
+            <Modal style={{ margin: "3%", overflowY: "auto" }} open onClose={onCloseCallback}>
                 <Container maxWidth="sm" style={{ backgroundColor: "white", padding: "15px" }}>
                     <Grid container direction="column" justifyContent="center" alignItems="stretch">
                         <div style={{ display: "flex" }}>
-                            Utwórz zlecenie
+                            {editMode ? <b>Edytuj zlecenie</b> : <b>Utwórz zlecenie</b>}
                             <GrClose onClick={onCloseCallback} style={{ margin: "5px", marginLeft: "auto" }} />
                         </div>
                         <hr style={{ width: "100%", height: "1px" }} />
-                        <input className="form-control form-control-lg input" type="text" placeholder="Nazwa" name="name" ref={register({ required: true })} />
-                        {errors.name?.type === "required" && <ErrorMessage>Name is required</ErrorMessage>}
-                        <input className="form-control form-control-lg input" type="text" placeholder="Typ" name="type" ref={register({ required: true })} />
-                        {errors.type?.type === "required" && <ErrorMessage>Type is required</ErrorMessage>}
+                        <label for="name">Nazwa</label>
+                        <input className="form-control form-control-lg input" type="text" placeholder="Np. Wodev" name="Name" ref={register({ required: true })} />
+                        {errors.name?.type === "required" && <ErrorMessage>Nazwa jest wymagana</ErrorMessage>}
+                        <label for="typ">Typ</label>
+                        <input className="form-control form-control-lg input" type="text" placeholder="Np. aplikacja mobilna" name="Type" ref={register({ required: true })} />
+                        {errors.type?.type === "required" && <ErrorMessage>Typ jest wymagany</ErrorMessage>}
+
+                        <label for="deadline">Planowana data zakończenia</label>
+                        <input className="form-control from-control-lg input" type="date" name="DeadLine" ref={register({ required: true })} />
+                        {errors.deadline?.type === "required" && <ErrorMessage>Data jest wymagana</ErrorMessage>}
+
+                        <label for="func">Wymagania funkcjonalne</label>
                         <textarea
                             className="form-control form-control-lg input"
                             style={{ maxHeight: "500px", minHeight: "50px", width: "100%" }}
                             type="text"
-                            placeholder="Wymagania funkcjonalne"
-                            name="func"
+                            placeholder="Np. Aplikacja musi posiadać panel admina"
+                            name="ReqFunc"
                             ref={register({ required: true })}
                         />
                         {errors.func?.type === "required" && <ErrorMessage>Zdefiniuj conajmniej jedno wymaganie</ErrorMessage>}
+                        <label for="noFunc">Wymagania niefunkcjonalne</label>
                         <textarea
                             className="form-control form-control-lg input"
                             style={{ maxHeight: "500px", minHeight: "50px", width: "100%" }}
                             type="text"
-                            placeholder="Wymagania niefunkcjonalne"
-                            name="nofunc"
+                            placeholder="Np. Aplikacja musi działać na telefonach z systemem Android"
+                            name="ReqNoFunc"
                             ref={register({ required: true })}
                         />
+
+                        <label for="technology">Proponowane technologie</label>
+                        <input className="form-control form-control-lg input" type="text" placeholder="Np. Android" name="Technology" ref={register({ required: true })} />
                         {errors.nofunc?.type === "required" && <ErrorMessage>Zdefiniuj conajmniej jedno wymaganie</ErrorMessage>}
 
                         <span>Dodaj projekt graficzny</span>
@@ -84,7 +121,7 @@ export const CreateOrder = ({ onCloseCallback, editMode = false }) => {
                                 <input
                                     id="upload"
                                     type="file"
-                                    name="files"
+                                    name="Files"
                                     accept="image/*,.zip,.rar"
                                     multiple
                                     onChange={selectFiles}
@@ -93,29 +130,21 @@ export const CreateOrder = ({ onCloseCallback, editMode = false }) => {
                                 />
                             </div>
                             <div className="col-8">
-                                <ul style={{ maxHeight: "100px", overflowX: "hidden",overflowY:'auto', width: "100%" }}>
+                                <ul style={{ maxHeight: "100px", overflowX: "hidden", overflowY: "auto", width: "100%" }} className="list-group">
                                     {fileList.map((x) => (
-                                        <li className="row" style={{listStyle:'none',justifyContent:'left'}}>
+                                        <li className="list-group-item" style={{ listStyle: "none", justifyContent: "left" }}>
                                             <GrClose
                                                 onClick={() => {
                                                     setFileList(fileList.filter((y) => y != x));
                                                 }}
                                                 style={{ marginRight: "1px" }}
                                             />
-                                            <span style={{textOverflow:'ellipsis',whiteSpace:'nowrap',overflow:'hidden',width:'250px'}}>{x.name}</span>
+                                            <span style={{ textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden", width: "250px" }}>{x.name}</span>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
                         </div>
-                        <textarea
-                            className="form-control form-control-lg input"
-                            style={{ maxHeight: "100px", minHeight: "50px", width: "100%" }}
-                            type="text"
-                            placeholder="Proponowane technologie"
-                            name="tech"
-                            ref={register()}
-                        />
 
                         <hr style={{ width: "100%", height: "1px" }} />
                         <div style={{ display: "flex", justifyContent: "end" }}>

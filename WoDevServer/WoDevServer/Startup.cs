@@ -38,13 +38,13 @@ namespace WoDevServer
         public void ConfigureServices(IServiceCollection services)
         {
 
-            
-                services.AddDbContext<WodevContext>(options =>
-                                    options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
-            
-                //services.AddDbContext<WodevContext>(options =>
-                //    options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE")));
-            
+
+            services.AddDbContext<WodevContext>(options =>
+                                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
+
+            //services.AddDbContext<WodevContext>(options =>
+            //    options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE")));
+
 
             var appSettingsSection = Configuration.GetSection("Jwt");
             services.Configure<JwtOptions>(appSettingsSection);
@@ -72,6 +72,8 @@ namespace WoDevServer
                             var cachedToken = cache.Get(searchedCache);
                             if (cachedToken == null)
                                 context.Fail(new UnauthorizedAccessException());
+
+                            
 
                         }
 

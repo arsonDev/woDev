@@ -1,8 +1,8 @@
 import { BaseURL } from ".";
-import { sendRequest } from "./CommonService";
+import axios from '../Utils/apiUtils';
 
 export const ResetPassword = (data) =>
-    sendRequest("post", `${BaseURL}/user/resetPassword`, data).then((res) => {
+    axios.post(`${BaseURL}/user/resetPassword`, data).then((res) => {
         if (res.status == 200) {
             return true;
         }

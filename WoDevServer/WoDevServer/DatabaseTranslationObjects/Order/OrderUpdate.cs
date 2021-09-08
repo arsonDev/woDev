@@ -1,34 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 using WoDevServer.DatabaseTranslationObjects.OrderFile;
+using WoDevServer.DatabaseTranslationObjects.User;
 
 namespace WoDevServer.DatabaseTranslationObjects.Order
 {
-    public class OrderCreate
+    public class OrderUpdate
     {
-        [Required]
+        public int Id { get; set; }
         public string Name { get; set; }
 
-        [Required]
         public string Type { get; set; }
 
-        [Required]
         public string ReqFunc { get; set; }
 
         public string ReqNoFunc { get; set; }
 
-        [Required]
         public string Technology { get; set; }
 
-        [Required]
         public DateTime DeadLine { get; set; }
 
-        [Required]
+        public UserRead WorkingUser { get; set; }
+
         public List<OrderFileRead> Files { get; set; }
-
-        [Required]
-        public int CreateUserId { get; set; }
-
     }
 }

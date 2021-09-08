@@ -2,11 +2,11 @@ import Axios from "axios";
 import { BaseURL } from ".";
 import { ResponseStatus } from "./Status";
 import { authHeader, sendRequest } from "./CommonService";
-import axios from "axios";
+import axios from '../Utils/apiUtils'
 import { Redirect, useHistory } from "react-router-dom";
 
 export const Login = (data) =>
-    sendRequest("post", `${BaseURL}/user/login`, data)
+    axios.post(`${BaseURL}/user/login`, data)
         .then((res) => {
             if (res.status == 200 && res.data) {
                 let userData = JSON.stringify(res.data);
@@ -24,7 +24,7 @@ export const Login = (data) =>
         });
 
 export const CheckEmailNotUsed = (email) => {
-    sendRequest("post", `${BaseURL}/user/checkEmail`, email).then((res) => {
+    axios.post(`${BaseURL}/user/checkEmail`, email).then((res) => {
         if (res.status == 200) {
             return ResponseStatus.SUCCESS;
         } else {

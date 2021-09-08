@@ -1,5 +1,4 @@
-import axios from "axios";
-import Axios from "axios";
+import axios from '../Utils/apiUtils';
 import { BaseURL } from ".";
 import { authHeader, sendRequest } from "./CommonService";
 

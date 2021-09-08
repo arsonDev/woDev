@@ -8,7 +8,7 @@ namespace WoDevServer.Database
         public WodevContext(DbContextOptions<WodevContext> options) : base(options)
         {
             this.Database.EnsureCreated();
-            this.Database.Migrate();
+            //this.Database.Migrate();
         }
 
         public DbSet<User> User { get; set; }

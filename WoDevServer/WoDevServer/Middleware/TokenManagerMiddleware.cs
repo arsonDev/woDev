@@ -23,6 +23,10 @@ namespace WoDevServer.Middleware
 
             if (_tokenManager.IsCurrentActiveToken() || context.GetEndpoint()?.Metadata?.GetMetadata<IAllowAnonymous>() is object)
             {
+                if (_tokenManager.IsCurrentActiveToken())
+                {
+                    _tokenManager.IncreaseValid();
+                }
                 await next(context);
                 return;
             }
