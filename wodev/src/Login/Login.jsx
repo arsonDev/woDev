@@ -32,6 +32,10 @@ export default function Login() {
         })
     }
 
+    const closeError = () => {
+        setOpenError(false);
+    }
+
     const onSubmit = (data) => {
         LoginMethod(data)
             .then((res) => {
@@ -81,13 +85,7 @@ export default function Login() {
                     </Link>
                 </div>
             </div>
-            <SnackbarInfo
-                isOpen={openError}
-                message={errorMessage}
-                onClose={() => {
-                    setOpenError(false);
-                }}
-            />
+           <ErrorMessage error={errorMessage} openError={openError} closeCallback={closeError}/>
         </div>
         </>
     );

@@ -1,4 +1,4 @@
-.buttonStyle{
+.buttonStyle {
     border-radius: 5px;
     border-color: palevioletred;
     border-style: solid;
@@ -10,10 +10,29 @@
     text-align: center;
     text-justify: auto;
 
-    &:hover{
-       cursor: pointer; 
-       color : white;
-       background-color: palevioletred;
-       transition: all 0.2s ease-in;
+    &:hover {
+        cursor: pointer;
+        color: white;
+        background-color: palevioletred;
+        transition: all 0.2s ease-in;
+    }
+}
+
+.modalOrder {
+    margin: 3%;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        height: 0px;
+    }
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: #555;
     }
 }

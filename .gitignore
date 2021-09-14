@@ -578,3 +578,7 @@ WodevServer/WodevServer/obj/
 /WoDevServer/WoDevServer/obj/
 /WoDevServer/WoDevServer/obj/
 /WoDevServer/.vs/
+/Resources
+WoDevServer/.vs
+WoDevServer/WoDevServer/obj
+WoDevServer/WoDevServer/obj/*

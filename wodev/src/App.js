@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect, useHistory } fr
 import Login from "./Login/Login";
 import RestorePassword from "./Login/RestorePassword";
 import Home from "./Home/Home.jsx";
-import PrivateRoute from "./_components/PrivateRoute";
+import {PrivateRoute, PublicRoute } from "./_components/PrivateRoute";
 import Profile from "./Profile/Profile";
 import SignIn from "./Login/SignIn";
 import { TopBar } from "./Utils/TopBar";
@@ -26,10 +26,10 @@ function App() {
                         }}
                         exact
                     />
-                    <Route path="/login" component={Login} />
+                    <PublicRoute path="/login" component={Login} />
                     <PrivateRoute path="/createProfile" component={Profile} exact />
-                    <Route path="/createAccount" component={SignIn} exact />
-                    <Route path="/restorePassword" component={RestorePassword} exact />
+                    <PublicRoute path="/createAccount" component={SignIn} exact />
+                    <PublicRoute path="/restorePassword" component={RestorePassword} exact />
 
                     <Redirect to="/dashboard" />
                 </Switch>

@@ -2,7 +2,7 @@ import React from "react";
 import { SearchBar } from "../Utils/SearchBar";
 import { ProfileTypeDict } from "../Profile/ProfileType";
 import { TopBar } from "../Utils/TopBar";
-import { Box, Button, Tab, Tabs } from "@material-ui/core";
+import { Box, Button, IconButton, Tab, Tabs } from "@material-ui/core";
 import { GrAdd } from "react-icons/gr";
 import { useState } from "react";
 import { CreateOrder } from "../Orders/CreateOrders/CreateOrder";
@@ -128,16 +128,20 @@ export default function Home() {
                     item={itemToEdit}
                 />
             )}
-            {profile.type == 1}
+            {//profile.type &&
             <Button
+                style={{borderRadius:'8px', position:'absolute',top:'auto',left:'auto',right:'2vw',bottom:'2vh'}}
+                // aria-label="add"
                 variant="contained"
                 color="primary"
+                size="large"
                 onClick={() => {
                     setCreateModal(!createModal);
-                }}>
-                <GrAdd style={{ marginRight: "15px" }} />
+                }}
+                startIcon={<GrAdd/>}>
+                
                 Dodaj
-            </Button>
+            </Button>}
         </>
     );
 }

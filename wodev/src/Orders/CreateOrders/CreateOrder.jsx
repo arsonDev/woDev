@@ -67,8 +67,8 @@ export const CreateOrder = ({ onCloseCallback, editMode = false, item = {} }) =>
     };
 
     return (
-        <>
-            <Modal style={{ margin: "3%", overflowY: "auto" }} open onClose={onCloseCallback}>
+        <div>
+            <Modal className="modalOrder" open onClose={onCloseCallback}>
                 <Container maxWidth="sm" style={{ backgroundColor: "white", padding: "15px" }}>
                     <Grid container direction="column" justifyContent="center" alignItems="stretch">
                         <div style={{ display: "flex" }}>
@@ -155,6 +155,6 @@ export const CreateOrder = ({ onCloseCallback, editMode = false, item = {} }) =>
                     </Grid>
                 </Container>
             </Modal>
-        </>
+        </div>
     );
 };

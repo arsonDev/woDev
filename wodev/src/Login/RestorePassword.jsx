@@ -3,7 +3,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./RestorePassword.scss";
-import { ErrorMessage } from "../Utils/ErrorMessage";
+import { Error, ErrorMessage } from "../Utils/ErrorMessage";
 import { ResetPassword } from "../Services/PasswordService";
 import { useHistory } from "react-router-dom";
 import { TopBar } from "../Utils/TopBar";
@@ -12,7 +12,14 @@ export default function RestorePassword() {
     const { register, handleSubmit, errors } = useForm();
     const [message, setMessage] = useState();
     const [openAlert, setOpenAlert] = useState(false);
+    const [isInfo,setIsInfo] = useState(false);
     const history = useHistory();
+
+    const closeError = () => {
+        setOpenAlert(false);
+        setIsInfo(false);
+        setMessage("");
+    }
 
     const onSubmit = (data) => {
         ResetPassword(data)
@@ -20,6 +27,7 @@ export default function RestorePassword() {
                 if (res == true) {
                     setMessage("Nowe hasło zostało wyłane na twój email");
                     setOpenAlert(true);
+                    setIsInfo(true);
                     history.push("login");
                 } else {
                     setMessage("Skontaktuj się z adminem");
@@ -52,17 +60,7 @@ export default function RestorePassword() {
                         </Button>
                     </div>
                 </form>
-                <Snackbar
-                    open={openAlert}
-                    autoHideDuration={5000}
-                    onClose={() => {
-                        setOpenAlert(false);
-                        setMessage("");
-                    }}>
-                    <MuiAlert elevation={6} variant="filled" severity="error">
-                        {message}
-                    </MuiAlert>
-                </Snackbar>
+                {openAlert && <Error closeCallback = {closeError} error={message} isInfo={isInfo}/>}
             </div>
         </>
     );
