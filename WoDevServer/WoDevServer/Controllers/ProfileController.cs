@@ -44,8 +44,12 @@ namespace WoDevServer.Controllers
 
                 
                 await _profileRepository.CreateAsync(profile);
-                
-                return Ok();
+
+                var newProfile = _profileRepository.GetByUserAsync(profileCreate.UserId);
+
+                var response = _mapper.Map<ProfileRead>(newProfile);
+
+                return Ok(response);
             }
             catch (Exception e)
             {

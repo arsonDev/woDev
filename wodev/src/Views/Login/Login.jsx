@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./Login.scss";
 import { Button } from "@material-ui/core";
-import { ErrorMessage } from "../Utils/ErrorMessage";
-import { TextButton } from "../Utils/TextButton";
+import { Error,ErrorMessage } from "../../Utils/ErrorMessage";
+import { TextButton } from "../../Utils/TextButton";
 import { Link, Redirect } from "react-router-dom";
-import Logo from "../Resources/Logo.png";
-import { ResponseStatus } from "../Services/Status";
+import Logo from "../../Resources/Logo.png";
+import { ResponseStatus } from "../../Services/Status";
 import { useHistory } from "react-router-dom";
-import SnackbarInfo from "../_components/SnackbarInfo";
-import {Login as LoginMethod} from '../Services/LoginService'
-import { TopBar } from "../Utils/TopBar";
+import SnackbarInfo from "../../_components/SnackbarInfo";
+import {Login as LoginMethod} from '../../Services/LoginService'
+import { TopBar } from "../../Utils/TopBar";
 
 export default function Login() {
     const { register, handleSubmit, errors ,reset} = useForm({});
@@ -19,7 +19,8 @@ export default function Login() {
     const [errorMessage, setErrorMessage] = useState();
 
     React.useEffect(() => {
-        checkConnection();
+        // checkConnection();
+        localStorage.removeItem('user');
     },[])
 
     const checkConnection = () => {
@@ -85,7 +86,7 @@ export default function Login() {
                     </Link>
                 </div>
             </div>
-           <ErrorMessage error={errorMessage} openError={openError} closeCallback={closeError}/>
+           {openError && <Error  error={errorMessage} closeCallback={closeError}/>}
         </div>
         </>
     );

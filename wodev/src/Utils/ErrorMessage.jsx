@@ -1,6 +1,8 @@
 import SnackbarInfo from "../_components/SnackbarInfo";
-import MuiAlert from "@material-ui/lab/Alert";
 import styled from "styled-components";
+import { Alert } from "@material-ui/lab";
+import { useEffect } from "react";
+import { Snackbar } from "@material-ui/core";
 
 export const ErrorMessage = styled.span`
     color: red;
@@ -9,14 +11,15 @@ export const ErrorMessage = styled.span`
 `;
 
 export const Error = ({ error, closeCallback,isInfo=false} ) => {
-    const generateMessage = error.Message ? error.Message : error.Error ? error.Error : error;
+    const generateMessage = () => {
+        return error.Message ? error.Message : error.Error ? error.Error : error ? error : !isInfo ? "Błąd połączenia z serwerem" : error ;}
 
+        
     return (
-        <SnackbarInfo isOpen={true} onClose={closeCallback} autoHideDuration={5000}>
-            <MuiAlert elevation={6} variant="filled" severity={isInfo ? "info" : "error"}>
-                <span>{generateMessage}</span>
-            </MuiAlert>
-            <span>{generateMessage}</span>
-        </SnackbarInfo>
+        <Snackbar open={true} onClose={closeCallback} autoHideDuration={7000}>
+        <Alert color={isInfo ? 'info' : "error"} variant="filled" severity={isInfo ? 'info' : "error"} sx={{ width: '100%' }}>
+                <span>{generateMessage()}</span>
+        </Alert>
+        </Snackbar>
     );
 };

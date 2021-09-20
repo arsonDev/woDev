@@ -10,13 +10,18 @@ namespace WoDevServer.Database.Repository
     {
         public Task<Order> Create(Order order);
 
-        public Task<(List<Order>,int)> GetMyOrders(int userId, int page, int pageSize);
+        public Task<(List<Order>,int)> GetOrders(int userId, int page, int pageSize);
 
         public Task<(List<Order>,int)> GetOrderInProgres(int userId, int page, int pageSize);
+
+        public Task<(List<Order>, int)> GetMyCreated(int userId, int page, int pageSize);
+
+        public Task<(List<Order>, int)> GetOnWorking(int userId, int page, int pageSize);
 
         public Task<bool> Update(Order order);
 
         public Task<Order> GetById(int id);
 
+        public Task Delete(int id);
     }
 }

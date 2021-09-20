@@ -60,27 +60,6 @@ namespace WoDevServer
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
-                x.Events = new JwtBearerEvents
-                {
-                    OnTokenValidated = context =>
-                    {
-
-                        var cache = context.HttpContext.RequestServices.GetRequiredService<IMemoryCache>();
-                        if (context.Request.Headers.TryGetValue("authorization", out Microsoft.Extensions.Primitives.StringValues t))
-                        {
-                            var searchedCache = t.Single().Split(' ').AsEnumerable().Last();
-                            var cachedToken = cache.Get(searchedCache);
-                            if (cachedToken == null)
-                                context.Fail(new UnauthorizedAccessException());
-
-                            
-
-                        }
-
-
-                        return Task.CompletedTask;
-                    }
-                };
                 x.RequireHttpsMetadata = false;
                 x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
@@ -89,6 +68,21 @@ namespace WoDevServer
                     ValidateLifetime = true,
                     ValidateAudience = false,
                     ValidateIssuer = false
+                };
+                x.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var cache = context.HttpContext.RequestServices.GetRequiredService<IMemoryCache>();
+                        if (context.Request.Headers.TryGetValue("authorization", out Microsoft.Extensions.Primitives.StringValues t))
+                        {
+                            var searchedCache = t.Single().Split(' ').AsEnumerable().Last();
+                            var cachedToken = cache.Get(searchedCache);
+                            if (cachedToken == null)
+                                context.Fail(new UnauthorizedAccessException());
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

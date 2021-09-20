@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using WoDevServer.Database.Model;
 
 namespace WoDevServer.Database
@@ -8,7 +9,13 @@ namespace WoDevServer.Database
         public WodevContext(DbContextOptions<WodevContext> options) : base(options)
         {
             this.Database.EnsureCreated();
-            //this.Database.Migrate();
+            try
+            {
+                this.Database.Migrate();
+            }catch(Exception e)
+            {
+
+            }
         }
 
         public DbSet<User> User { get; set; }

@@ -1,11 +1,11 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import worker from "../Resources/worker.png";
-import employer from "../Resources/employer.png";
+import worker from "../../Resources/worker.png";
+import employer from "../../Resources/employer.png";
 
 export const ProfileTypeDict = {
     creator: "Creator",
-    dev: "Dev",
+    dev: "Programmer",
 };
 
 export default function ProfileType({ profileType, selected, onClickEvent }) {
@@ -20,6 +20,8 @@ export default function ProfileType({ profileType, selected, onClickEvent }) {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        width: 165px;
+        min-width: 165px;
 
         ${() =>
             selected &&
@@ -28,7 +30,8 @@ export default function ProfileType({ profileType, selected, onClickEvent }) {
             `}}
 
         img {
-            height: 120px;
+            height: 120px !important;
+            width: 100px !important;
         }
 
         :hover {

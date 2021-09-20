@@ -5,14 +5,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@material-ui/core";
 import "./Profile.scss";
-import { CreateAccount } from "../Services/ProfileService";
-import { CreateUser } from "../Services/UserService";
-import SnackbarInfo from "../_components/SnackbarInfo";
-import { ErrorMessage } from "../Utils/ErrorMessage";
+import { CreateAccount } from "../../Services/ProfileService";
+import { CreateUser } from "../../Services/UserService";
+import SnackbarInfo from "../../_components/SnackbarInfo";
+import { ErrorMessage } from "../../Utils/ErrorMessage";
 import ProfileType, { ProfileTypeDict } from "./ProfileType";
-import { TopBar } from "../Utils/TopBar";
+import { TopBar } from "../../Utils/TopBar";
 
-export default function Profile({ userId }) {
+export default function Profile() {
     const { register, handleSubmit, errors } = useForm();
     const history = useHistory();
     const [startDate, setStartDate] = useState(null);
@@ -24,12 +24,15 @@ export default function Profile({ userId }) {
     function onSubmit(values) {
         let profileData = {
             ...values,
-            Type: type == ProfileTypeDict.dev ? 0 : 1,
+            userProfileTypeId: type == ProfileTypeDict.dev ? 1 : 2,
             UserId : user.userId
         };
 
         CreateAccount(profileData)
             .then((res) => {
+                let localUser = JSON.parse(localStorage.getItem('user'));
+
+                localStorage.setItem('user',JSON.stringify({...localUser,profile : res}));
                 history.push("/dashboard");
             })
             .catch((err) => {
@@ -40,49 +43,58 @@ export default function Profile({ userId }) {
     return (
         <>
             <TopBar />
-            <div className="center">
-                <h3>Fill inputs and select type to complete create account</h3>
+            <div className="container fluid center" style={{overflowX:'hidden'}}>
+            <div className="center profileForm">
+                <h3>Wypełnij pola aby dokończyc proces tworzenia konta</h3>
                 <div className="form-group centerGroup">
                     <div className="centerType">
                         <ProfileType profileType={ProfileTypeDict.creator} onClickEvent={() => setType(ProfileTypeDict.creator)} selected={type == ProfileTypeDict.creator} />
                         <ProfileType profileType={ProfileTypeDict.dev} onClickEvent={() => setType(ProfileTypeDict.dev)} selected={type == ProfileTypeDict.dev} />
                     </div>
-                    <input className="form-control form-control-lg input" type="text" placeholder="Name" name="Name" ref={register({ required: true })} />
-                    {errors.Name?.type === "required" && <ErrorMessage>Name is required</ErrorMessage>}
-                    <input className="form-control form-control-lg input" type="text" placeholder="Surname" name="SurName" ref={register({ required: true })} />
-                    {errors.SurName?.type === "required" && <ErrorMessage>Surname is required</ErrorMessage>}
+                    <label for="Name">Imię</label>
+                    <input className="form-control form-control-lg input" type="text" placeholder="Np. Jan" name="Name" ref={register({ required: true })} />
+                    {errors.Name?.type === "required" && <ErrorMessage>Imie jest wymagane</ErrorMessage>}
+                    <label for="SurName">Nazwisko</label>
+                    <input className="form-control form-control-lg input" type="text" placeholder="Np. Kowalski" name="SurName" ref={register({ required: true })} />
+                    {errors.SurName?.type === "required" && <ErrorMessage>Nazwisko jest wymagane</ErrorMessage>}
+                    <label for="BirthDate">Data urodzenia</label>
                     <div className="datePickerStyle">
                         <DatePicker
                             className="form-control form-control-lg input"
                             name="BirthDate"
-                            placeholderText="Birthdate"
+                            placeholderText="Np. 01/01/1990"
                             selected={startDate}
                             onChange={(e) => setStartDate(e)}
                             ref={register({ required: true })}
                         />
                     </div>
-                    {errors.BirthDate?.type === "required" && <ErrorMessage>Birthdate is required</ErrorMessage>}
-                    <input className="form-control form-control-lg input" type="text" placeholder="Address" name="Address" ref={register({ required: true })} />
-                    {errors.Address?.type === "required" && <ErrorMessage>Address is required</ErrorMessage>}
+                    {errors.BirthDate?.type === "required" && <ErrorMessage>Data urodzenia jest wymagana</ErrorMessage>}
+                    
+                    <label for="Address">Adres</label>
+                    <input className="form-control form-control-lg input" type="text" placeholder="Np Warszawa 1 Polska" name="Address" ref={register()} />
+                    
+                    <label for="Phone">Telefon</label>
                     <input
                         className="form-control form-control-lg input"
                         type="text"
-                        placeholder="Phone"
+                        placeholder="Np. 123456789"
                         name="Phone"
-                        ref={register({ required: true, pattern: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/ })}
+                        ref={register( {pattern: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/ })}
                     />
-                    {errors.phone?.type === "required" && <ErrorMessage>Phone is required</ErrorMessage>}
-                    {errors.phone?.type === "pattern" && <ErrorMessage>Phone is invalid</ErrorMessage>}
+                    {errors.Phone?.type === "pattern" && <ErrorMessage>Telefon ma niepoprawny format</ErrorMessage>}
+
+                    <label for="Description">Opis</label>
                     <textarea
                         className="form-control form-control-lg input "
                         style={{ maxHeight: "300px", minHeight: "100px" }}
                         type="text"
-                        placeholder="Description"
+                        placeholder="Opisz siebie"
                         name="Description"
-                        ref={register}
+                        ref={register({required : true})}
                     />
+                    {errors.Description?.type === "required" && <ErrorMessage>Uzupełnij opis</ErrorMessage>}
                     <Button variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>
-                        Create a account
+                        Utwórz konto
                     </Button>
                 </div>
                 <SnackbarInfo
@@ -92,6 +104,7 @@ export default function Profile({ userId }) {
                         setErrorMessage(null);
                     }}
                 />
+            </div>
             </div>
         </>
     );

@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using WoDevServer.Database.Repository;
+using WoDevServer.DatabaseTranslationObjects.Profile;
 using WoDevServer.DatabaseTranslationObjects.Session;
 using WoDevServer.DatabaseTranslationObjects.User;
 using WoDevServer.Models;
@@ -128,15 +129,15 @@ namespace WoDevServer.Controllers
                 var token = tokenHandler.CreateToken(tokenDescripton);
                 var tokenString = tokenHandler.WriteToken(token);
 
-                var profile = _profileRepository.GetByUserAsync(user);
-
+                var profile = _profileRepository.GetByUserAsync(user.UserId);
+                var profileMapped = _mapper.Map<ProfileRead>(profile);
                 //TODO
                 var responseTokenInfo = new
                 {
                     UserId = user.UserId,
                     Token = tokenString,
                     Expires = tokenDescripton.Expires,
-                    Profile = profile
+                    Profile = profileMapped
                 };
 
                 _tokenManager.ActivateToken(tokenString);

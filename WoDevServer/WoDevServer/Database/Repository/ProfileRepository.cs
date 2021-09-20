@@ -26,9 +26,9 @@ namespace WoDevServer.Database.Repository
             throw new NotImplementedException();
         }
 
-        public UserProfile GetByUserAsync(User user)
+        public UserProfile GetByUserAsync(int userId)
         {
-            return _context.UserProfile.FirstOrDefault(x => x.User.UserId == user.UserId);
+            return _context.UserProfile.FirstOrDefault(x => x.UserId == userId);
         }
 
         public async Task Remove(UserProfile data)

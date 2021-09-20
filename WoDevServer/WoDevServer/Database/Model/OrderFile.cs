@@ -22,6 +22,8 @@ namespace WoDevServer.Database.Model
 
         public DateTime CreateDate { get; private set; } = DateTime.Now;
 
+        [ForeignKey("Order")]
+        public int OrderId { get; set; }
         public virtual Order Order { get; set; }
     }
 }

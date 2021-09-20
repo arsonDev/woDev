@@ -10,7 +10,7 @@ namespace WoDevServer.Database.Repository
     {
         Task<bool> SaveChanges();
 
-        UserProfile GetByUserAsync(User user);
+        UserProfile GetByUserAsync(int userId);
 
         Task Update(UserProfile data);
 

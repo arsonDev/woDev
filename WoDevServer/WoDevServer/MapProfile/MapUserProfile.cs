@@ -14,6 +14,8 @@ namespace WoDevServer.MapProfile
         {
             CreateMap<UserProfile, ProfileCreate>();
             CreateMap<ProfileCreate, UserProfile>();
+
+            CreateMap<UserProfile, ProfileRead>();
         }
     }
 }

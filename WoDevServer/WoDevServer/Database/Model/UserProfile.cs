@@ -21,7 +21,6 @@ namespace WoDevServer.Database.Model
         [Required]
         public string Description { get; set; }
 
-        [Required]
         public string Address { get; set; }
 
         public string Phone { get; set; }
@@ -36,6 +35,9 @@ namespace WoDevServer.Database.Model
         public string SurName { get; set; }
 
         [Required]
-        public int Type { get; set; }
+        [ForeignKey("UserProfileType")]
+        public int UserProfileTypeId { get; set; }
+
+        public virtual UserProfileType UserProfileType { get; set; }
     }
 }

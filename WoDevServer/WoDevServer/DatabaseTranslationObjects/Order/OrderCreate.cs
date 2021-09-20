@@ -16,9 +16,9 @@ namespace WoDevServer.DatabaseTranslationObjects.Order
         [Required]
         public string ReqFunc { get; set; }
 
+        [Required]
         public string ReqNoFunc { get; set; }
 
-        [Required]
         public string Technology { get; set; }
 
         [Required]

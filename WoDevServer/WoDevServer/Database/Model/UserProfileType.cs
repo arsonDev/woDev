@@ -10,9 +10,9 @@ namespace WoDevServer.Database.Model
     public class UserProfileType
     {
         [Key]
-        [Column("Id")]
         public int Id { get; set; }
 
         public string Name { get; set; }
+        public virtual ICollection<UserProfile> UserProfiles { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WoDevServer.Database;
 
 namespace WoDevServer.Migrations
 {
     [DbContext(typeof(WodevContext))]
-    partial class WodevContextModelSnapshot : ModelSnapshot
+    [Migration("20210919154223_ORdrImprove")]
+    partial class ORdrImprove
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,6 +205,7 @@ namespace WoDevServer.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("BirthDate")
@@ -240,7 +243,8 @@ namespace WoDevServer.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.HasIndex("UserProfileTypeId");
+                    b.HasIndex("UserProfileTypeId")
+                        .IsUnique();
 
                     b.ToTable("Profile");
                 });
@@ -307,8 +311,8 @@ namespace WoDevServer.Migrations
                         .IsRequired();
 
                     b.HasOne("WoDevServer.Database.Model.UserProfileType", "UserProfileType")
-                        .WithMany()
-                        .HasForeignKey("UserProfileTypeId")
+                        .WithOne("UserProfile")
+                        .HasForeignKey("WoDevServer.Database.Model.UserProfile", "UserProfileTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -326,6 +330,11 @@ namespace WoDevServer.Migrations
                 {
                     b.Navigation("UserOrders");
 
+                    b.Navigation("UserProfile");
+                });
+
+            modelBuilder.Entity("WoDevServer.Database.Model.UserProfileType", b =>
+                {
                     b.Navigation("UserProfile");
                 });
 #pragma warning restore 612, 618

@@ -5,13 +5,9 @@ namespace WoDevServer.DatabaseTranslationObjects.Profile
 {
     public class ProfileCreate
     {
-
         [Required]
         public string Description { get; set; }
-
-        [Required]
         public string Address { get; set; }
-
         public string Phone { get; set; }
         public byte[] File { get; set; }
         public byte[] Logo { get; set; }
@@ -24,7 +20,7 @@ namespace WoDevServer.DatabaseTranslationObjects.Profile
         public string SurName { get; set; }
 
         [Required]
-        public int Type { get; set; }
+        public int UserProfileTypeId { get; set; }
 
         [Required]
         public int UserId { get; set; }

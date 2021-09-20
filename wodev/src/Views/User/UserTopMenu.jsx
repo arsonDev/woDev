@@ -2,8 +2,8 @@ import React from "react";
 import { useState } from "react";
 import Avatar from "react-avatar";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
-import { logoutMethod } from "../Services/LoginService";
-import { ResponseStatus } from "../Services/Status";
+import { logoutMethod } from "../../Services/LoginService";
+import { ResponseStatus } from "../../Services/Status";
 import Dropdown from "react-dropdown-overflow";
 import { Button } from "@material-ui/core";
 
@@ -39,6 +39,6 @@ export const UserTopMenu = () => {
         //             }></Dropdown>
         //     )}
         // </div>
-        <Button onClick={logout}>Logout</Button>
+        <Button variant="contained" color="secondary" onClick={logout}>Wyloguj</Button>
     );
 };

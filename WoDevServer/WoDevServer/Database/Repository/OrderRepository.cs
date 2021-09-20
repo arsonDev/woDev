@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,21 +23,40 @@ namespace WoDevServer.Database.Repository
             return order;
         }
 
-        public async Task<Order> GetById(int id)
+        public async Task Delete(int id)
         {
-            return _context.Orders.FirstOrDefault(x => x.Id == id);
+            var order = _context.Orders.FirstOrDefault(x => x.Id == id);
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<(List<Order>, int)> GetMyOrders(int userId, int page, int pageSize)
+        public async Task<Order> GetById(int id)
         {
-            var orders = _context.Orders.Where(x => x.CreateUserId == userId && x.WorkingUser == null);
+            return _context.Orders.Include(x => x.Files).FirstOrDefault(x => x.Id == id);
+        }
 
+        public async Task<(List<Order>, int)> GetMyCreated(int userId, int page, int pageSize)
+        {
+            var orders = _context.Orders.Include(x => x.Files).Where(x => x.CreateUserId == userId);
+            return (orders.Skip((page * pageSize) - pageSize).Take(pageSize).ToList(), orders.Count());
+        }
+
+        public async Task<(List<Order>, int)> GetOrders(int userId, int page, int pageSize)
+        {
+            var orders = _context.Orders.Include(x => x.Files).Where(x => x.CreateUserId != userId && x.WorkingUser == null);
+
+            return (orders.Skip((page * pageSize) - pageSize).Take(pageSize).ToList(), orders.Count());
+        }
+
+        public async Task<(List<Order>, int)> GetOnWorking(int userId, int page, int pageSize)
+        {
+            var orders = _context.Orders.Include(x => x.Files).Where(x => x.CreateUserId == userId && x.WorkingUser != null);
             return (orders.Skip((page * pageSize) - pageSize).Take(pageSize).ToList(), orders.Count());
         }
 
         public async Task<(List<Order>, int)> GetOrderInProgres(int userId, int page, int pageSize)
         {
-            var orders = _context.Orders.Where(x => x.WorkingUser != null && x.WorkingUser.UserId == userId);
+            var orders = _context.Orders.Include(x => x.Files).Where(x => x.WorkingUser != null && x.WorkingUser.UserId == userId);
             return (orders.Skip((page * pageSize) - pageSize).Take(pageSize).ToList(), orders.Count());
         }
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WoDevServer.Database;
 
 namespace WoDevServer.Migrations
 {
     [DbContext(typeof(WodevContext))]
-    partial class WodevContextModelSnapshot : ModelSnapshot
+    [Migration("20210915203208_UserTypeRelation")]
+    partial class UserTypeRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,6 +51,7 @@ namespace WoDevServer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Technology")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
@@ -84,7 +87,7 @@ namespace WoDevServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -203,6 +206,7 @@ namespace WoDevServer.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("BirthDate")
@@ -240,7 +244,8 @@ namespace WoDevServer.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.HasIndex("UserProfileTypeId");
+                    b.HasIndex("UserProfileTypeId")
+                        .IsUnique();
 
                     b.ToTable("Profile");
                 });
@@ -250,6 +255,7 @@ namespace WoDevServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("Id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
@@ -276,9 +282,7 @@ namespace WoDevServer.Migrations
                 {
                     b.HasOne("WoDevServer.Database.Model.Order", "Order")
                         .WithMany("Files")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("Order");
                 });
@@ -307,8 +311,8 @@ namespace WoDevServer.Migrations
                         .IsRequired();
 
                     b.HasOne("WoDevServer.Database.Model.UserProfileType", "UserProfileType")
-                        .WithMany()
-                        .HasForeignKey("UserProfileTypeId")
+                        .WithOne("UserProfile")
+                        .HasForeignKey("WoDevServer.Database.Model.UserProfile", "UserProfileTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -326,6 +330,11 @@ namespace WoDevServer.Migrations
                 {
                     b.Navigation("UserOrders");
 
+                    b.Navigation("UserProfile");
+                });
+
+            modelBuilder.Entity("WoDevServer.Database.Model.UserProfileType", b =>
+                {
                     b.Navigation("UserProfile");
                 });
 #pragma warning restore 612, 618

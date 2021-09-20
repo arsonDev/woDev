@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tP3tWwvLcUdhrldRs/QgtR+eNvWIeba7vNTE5xIrAA/uVa0mgR9ziWaC1JgNYaa3bKLO8p9GtafL7yMFADnUQw==",
+  "dgSpecHash": "mbp9nHlB1gJJUAoLjkiuLK9vZQY+s/3Z+4dMgL7Y5hQ+FYOOFpxgKBy1xYIzT5qiWp8wMH64CWRG/U8WZBDN6g==",
   "success": true,
-  "projectFilePath": "C:\\Devs_School\\woDev_o\\WoDevServer\\WoDevServer\\WoDevServer.csproj",
+  "projectFilePath": "C:\\Devs_School\\Praca inzynierska public\\woDev_o\\WoDevServer\\WoDevServer\\WoDevServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",

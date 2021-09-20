@@ -24,7 +24,7 @@ namespace WoDevServer.Controllers
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
 
-        public OrderController(IMapper mapper, IOrderRepository orderRepository,IUserRepository userRepository)
+        public OrderController(IMapper mapper, IOrderRepository orderRepository, IUserRepository userRepository)
         {
             _mapper = mapper;
             _orderRepository = orderRepository;
@@ -55,8 +55,28 @@ namespace WoDevServer.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var order = await _orderRepository.GetById(id);
+                if (order == null)
+                {
+                    return NotFound();
+                }
+
+                var mapped = _mapper.Map<OrderItemRead>(order);
+                return Ok(mapped);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e);
+            }
+        }
+
         /// <summary>
-        /// Wczytuje zlecenia utworzone przez mnie
+        /// Wczytuje dostępne zlecenia
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
@@ -66,7 +86,7 @@ namespace WoDevServer.Controllers
         {
             try
             {
-                var list = await _orderRepository.GetMyOrders(userId, page, pageSize);
+                var list = await _orderRepository.GetOrders(userId, page, pageSize);
                 var mappedList = _mapper.Map<List<OrderItemRead>>(list.Item1);
 
                 return Content(JsonConvert.SerializeObject(new OrderList { Count = list.Item2, Orders = mappedList }));
@@ -84,12 +104,46 @@ namespace WoDevServer.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("getOrderInProgres")]
-        public async Task<IActionResult> GetOrderInWorkers(int userId, int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetOrderInProgres(int userId, int page = 1, int pageSize = 10)
         {
             try
             {
                 var list = await _orderRepository.GetOrderInProgres(userId, page, pageSize);
 
+                var mappedList = _mapper.Map<List<OrderItemRead>>(list.Item1);
+
+                return Content(JsonConvert.SerializeObject(new OrderList { Count = list.Item2, Orders = mappedList }));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e);
+            }
+        }
+
+        [HttpGet]
+        [Route("getMyCreated")]
+        public async Task<IActionResult> GetMyCreated(int userId, int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                var list = await _orderRepository.GetMyCreated(userId, page, pageSize);
+                var mappedList = _mapper.Map<List<OrderItemRead>>(list.Item1);
+
+                return Content(JsonConvert.SerializeObject(new OrderList { Count = list.Item2, Orders = mappedList }));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e);
+            }
+        }
+
+        [HttpGet]
+        [Route("getOnWorking")]
+        public async Task<IActionResult> GetOnWorking(int userId, int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                var list = await _orderRepository.GetOnWorking(userId, page, pageSize);
                 var mappedList = _mapper.Map<List<OrderItemRead>>(list.Item1);
 
                 return Content(JsonConvert.SerializeObject(new OrderList { Count = list.Item2, Orders = mappedList }));
@@ -111,7 +165,7 @@ namespace WoDevServer.Controllers
                 if (order == null)
                     return NotFound();
 
-                var user =  await _userRepository.GetByIdAsync(patchDto.WorkingUser.UserId);
+                var user = await _userRepository.GetByIdAsync(patchDto.WorkingUser.UserId);
 
                 _mapper.Map(patchDto, order);
                 order.WorkingUser = user;
@@ -119,6 +173,21 @@ namespace WoDevServer.Controllers
 
 
 
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e);
+            }
+
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            try
+            {
+                await _orderRepository.Delete(id);
                 return Ok();
             }
             catch (Exception e)

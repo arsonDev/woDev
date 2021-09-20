@@ -1,13 +1,13 @@
 import { Button } from "@material-ui/core";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ErrorMessage } from "../Utils/ErrorMessage";
-import { TopBar } from "../Utils/TopBar";
-import SnackbarInfo from "../_components/SnackbarInfo";
-import { CreateUser } from "../Services/UserService";
+import { ErrorMessage } from "../../Utils/ErrorMessage";
+import { TopBar } from "../../Utils/TopBar";
+import SnackbarInfo from "../../_components/SnackbarInfo";
+import { CreateUser } from "../../Services/UserService";
 import { useHistory } from "react-router";
 import { EmailChecker } from "./EmailChecker";
-import Logo from "../Resources/Logo.png";
+import Logo from "../../Resources/Logo.png";
 
 export default function SignIn() {
     const { register, handleSubmit, errors, watch } = useForm();
@@ -36,17 +36,17 @@ export default function SignIn() {
 
                 <br />
                 <div className="form-group centerGroup">
-                        <input
-                            className="form-control form-control-lg input"
-                            type="text"
-                            placeholder="Email"
-                            name="Email"
-                            ref={register({ required: true, pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i })}
-                        />
-                        {errors.Email?.type === "required" && <ErrorMessage>Email jest wymagany</ErrorMessage>}
-                        {errors.Email?.type === "pattern" && <ErrorMessage>Email jest nieprawidłowy</ErrorMessage>}
-
-                        <EmailChecker email={watch("Email")} />
+                    <input
+                        className="form-control form-control-lg input"
+                        type="text"
+                        placeholder="Email"
+                        name="Email"
+                        ref={register({ required: true, pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i })}
+                    />
+                    {errors.Email?.type === "required" && <ErrorMessage>Email jest wymagany</ErrorMessage>}
+                    {errors.Email?.type === "pattern" && <ErrorMessage>Email jest nieprawidłowy</ErrorMessage>}
+                    {/* 
+                        <EmailChecker email={watch("Email")} /> */}
 
                     <input className="form-control form-control-lg input" type="password" placeholder="Hasło" name="Password" ref={register({ required: true, minLength: 8 })} />
                     {errors.Password?.type === "required" && <ErrorMessage>Hasło jest wymagane</ErrorMessage>}
@@ -55,7 +55,7 @@ export default function SignIn() {
                     <input
                         className="form-control form-control-lg input"
                         type="password"
-                        placeholder="Repeat password"
+                        placeholder="Powtórz hasło"
                         name="RepeatPassword"
                         ref={register({ required: true, minLength: 8, validate: isTheSame })}
                     />
@@ -65,9 +65,11 @@ export default function SignIn() {
 
                     <br />
                     <br />
+                    <div className="horizontalGroup">
                     <Button variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>
-                        Next
+                        Dalej
                     </Button>
+                    </div>
                 </div>
                 <SnackbarInfo
                     isOpen={errorMessage != null && errorMessage != undefined}

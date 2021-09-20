@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Devs_School\\woDev_o\\WoDevServer\\WoDevServer\\WoDevServer.csproj": {}
+    "C:\\Devs_School\\Praca inzynierska public\\woDev_o\\WoDevServer\\WoDevServer\\WoDevServer.csproj": {}
   },
   "projects": {
-    "C:\\Devs_School\\woDev_o\\WoDevServer\\WoDevServer\\WoDevServer.csproj": {
+    "C:\\Devs_School\\Praca inzynierska public\\woDev_o\\WoDevServer\\WoDevServer\\WoDevServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Devs_School\\woDev_o\\WoDevServer\\WoDevServer\\WoDevServer.csproj",
+        "projectUniqueName": "C:\\Devs_School\\Praca inzynierska public\\woDev_o\\WoDevServer\\WoDevServer\\WoDevServer.csproj",
         "projectName": "WoDevServer",
-        "projectPath": "C:\\Devs_School\\woDev_o\\WoDevServer\\WoDevServer\\WoDevServer.csproj",
+        "projectPath": "C:\\Devs_School\\Praca inzynierska public\\woDev_o\\WoDevServer\\WoDevServer\\WoDevServer.csproj",
         "packagesPath": "C:\\Users\\arkadiusz.kowalczyk\\.nuget\\packages\\",
-        "outputPath": "C:\\Devs_School\\woDev_o\\WoDevServer\\WoDevServer\\obj\\",
+        "outputPath": "C:\\Devs_School\\Praca inzynierska public\\woDev_o\\WoDevServer\\WoDevServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
@@ -121,7 +121,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

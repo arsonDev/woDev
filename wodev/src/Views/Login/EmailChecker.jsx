@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Lottie from "react-lottie";
-import * as okAnim from "../Resources/Animations/ok.json";
-import * as badAnim from "../Resources/Animations/bad.json";
+import * as okAnim from "../../Resources/Animations/ok.json";
+import * as badAnim from "../../Resources/Animations/bad.json";
 
 export const EmailChecker = ({ email }) => {
     const [valid, setValid] = useState(null);

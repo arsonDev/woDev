@@ -3,10 +3,10 @@ import MuiAlert from "@material-ui/lab/Alert";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./RestorePassword.scss";
-import { Error, ErrorMessage } from "../Utils/ErrorMessage";
-import { ResetPassword } from "../Services/PasswordService";
+import { Error, ErrorMessage } from "../../Utils/ErrorMessage";
+import { ResetPassword } from "../../Services/PasswordService";
 import { useHistory } from "react-router-dom";
-import { TopBar } from "../Utils/TopBar";
+import { TopBar } from "../../Utils/TopBar";
 
 export default function RestorePassword() {
     const { register, handleSubmit, errors } = useForm();
@@ -35,7 +35,7 @@ export default function RestorePassword() {
                 }
             })
             .catch((err) => {
-                setMessage(`Skontaktuj się z adminem: ${err}`);
+                setMessage(`Skontaktuj się z adminem: ${err.message}`);
                 setOpenAlert(true);
             });
     };

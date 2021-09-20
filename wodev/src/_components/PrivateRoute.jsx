@@ -16,7 +16,7 @@ export function PrivateRoute({ component: Component, rest }) {
             return false;
         }
     }
-    return <Route {...rest} render={(props) => (auth() == true ? <Component {...props} /> : <Redirect to="/login" />)} />;
+    return <Route {...rest} render={(props) => (auth() == true ? <Component {...props} /> /*JSON.parse(localStorage.getItem("user")).profile ? <Component {...props} /> : <Redirect to="/createProfile" />*/ : <Redirect to="/login" />)} />;
 }
 
 export function PublicRoute({ component: Component, rest }) {
