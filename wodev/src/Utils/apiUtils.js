@@ -3,7 +3,7 @@ import moment from "moment";
 
 axios.interceptors.request.use(
     function (config) {
-        // Do something before request is sent
+        localStorage.setItem('loading',true);
         console.log(config);
         return config;
     },
@@ -16,6 +16,8 @@ axios.interceptors.request.use(
 // Add a response interceptor
 axios.interceptors.response.use(
     function (response) {
+        
+        localStorage.setItem('loading',false);
         if (response.status == 401) {
             localStorage.removeItem("token");
             localStorage.removeItem("user");

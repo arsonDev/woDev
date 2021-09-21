@@ -32,7 +32,10 @@ namespace WoDevServer.Database.Repository
 
         public async Task<Order> GetById(int id)
         {
-            return _context.Orders.Include(x => x.Files).FirstOrDefault(x => x.Id == id);
+            var order = _context.Orders.Include(x => x.Files).FirstOrDefault(x => x.Id == id);
+            order.Files = await _context.OrderFiles.Where(x => x.OrderId == order.Id).ToListAsync();
+            return order;
+
         }
 
         public async Task<(List<Order>, int)> GetMyCreated(int userId, int page, int pageSize)

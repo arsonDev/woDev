@@ -10,6 +10,8 @@ import { OrderProvider, useOrders } from "../../_context/orderContext";
 import { OrderItem } from "./OrderItem";
 import SwipeableViews from "react-swipeable-views";
 import { updateOrder,deleteOrder } from "../../Services/OrderService";
+import LoadingOverlay from 'react-loading-overlay'
+import BounceLoader from 'react-spinners/BounceLoader'
 
 export default function Home() {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -111,8 +113,9 @@ export default function Home() {
 
     return (
         <>
+        
             <TopBar />
-            <div className="container-fluid">
+            <div className="container-fluid" style={{position : 'unset !important'}}>
                 <Tabs value={tab} onChange={changeTab} indicatorColor="primary" textColor="primary" centered>
                     {user.profile && user.profile.userProfileTypeId == 1 && (
                         <>
@@ -149,7 +152,7 @@ export default function Home() {
                         setItemToEdit(null);
                     }}
                     editMode={true}
-                    item={itemToEdit}
+                    itemId={itemToEdit.Id}
                 />
             )}
             {user.profile.userProfileTypeId == 2 && (

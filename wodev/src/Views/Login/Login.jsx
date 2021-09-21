@@ -18,6 +18,8 @@ export default function Login() {
     const [openError, setOpenError] = useState(false);
     const [errorMessage, setErrorMessage] = useState();
 
+    const [redirectTo,setRedirectTo] = useState('');
+
     React.useEffect(() => {
         // checkConnection();
         localStorage.removeItem('user');
@@ -41,10 +43,10 @@ export default function Login() {
         LoginMethod(data)
             .then((res) => {
                 if (res == ResponseStatus.SUCCESS) {
-                    history.push("/dashboard");
+                    setRedirectTo("/dashboard");
                 } else if (res == ResponseStatus.FIRST_LOGIN) {
 
-                    history.push("/createProfile");
+                    setRedirectTo("/createProfile");
                 } else {
                     setErrorMessage(res.message);
                     setOpenError(true);
@@ -88,6 +90,7 @@ export default function Login() {
             </div>
            {openError && <Error  error={errorMessage} closeCallback={closeError}/>}
         </div>
+        {redirectTo != '' && <Redirect to={redirectTo}/>}
         </>
     );
 }

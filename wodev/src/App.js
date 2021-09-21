@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link, Redirect, useHistory } from "react-router-dom";
 import Login from "./Views/Login/Login";
 import RestorePassword from "./Views/Login/RestorePassword";
 import Home from "./Views/Home/Home.jsx";
-import {PrivateRoute, PublicRoute } from "./_components/PrivateRoute";
+import { PrivateRoute, PublicRoute } from "./_components/PrivateRoute";
 import Profile from "./Views/Profile/Profile";
 import SignIn from "./Views/Login/SignIn";
 import { TopBar } from "./Utils/TopBar";
@@ -15,7 +15,7 @@ function App() {
         <>
             <Router>
                 <Switch>
-                    <PrivateRoute path="/createProfile" component={function(){return (<Profile/>)}} exact/>
+                    <PrivateRoute path="/createProfile" component={Profile} />
                     <PrivateRoute
                         path="/dashboard"
                         component={function () {
@@ -28,8 +28,8 @@ function App() {
                         exact
                     />
                     <PublicRoute path="/login" component={Login} />
-                    <PublicRoute path="/createAccount" component={SignIn}  />
-                    <PublicRoute path="/restorePassword" component={RestorePassword}  />
+                    <PublicRoute path="/createAccount" component={SignIn} />
+                    <PublicRoute path="/restorePassword" component={RestorePassword} />
 
                     <Redirect to="/dashboard" />
                 </Switch>

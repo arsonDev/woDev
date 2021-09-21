@@ -8,7 +8,7 @@ export const ProfileTypeDict = {
     dev: "Programmer",
 };
 
-export default function ProfileType({ profileType, selected, onClickEvent }) {
+export const ProfileType = ({ profileType, selected, onClickEvent }) => {
     const Card = styled.div`
         border-color: gray;
         border-radius: 15px;
