@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@material-ui/core";
 import "./Profile.scss";
 import { CreateAccount } from "../../Services/ProfileService";
@@ -14,7 +14,7 @@ import { TopBar } from "../../Utils/TopBar";
 export default function Profile() {
     const { register, handleSubmit, errors } = useForm();
     const history = useHistory();
-    const [startDate, setStartDate] = useState(null);
+    const [startDate, setStartDate] = useState(new Date(2000,1,1));
     const [errorMessage, setErrorMessage] = useState();
     const [type, setType] = useState(ProfileTypeDict.creator);
 
@@ -63,12 +63,11 @@ export default function Profile() {
                             {errors.SurName?.type === "required" && <ErrorMessage>Nazwisko jest wymagane</ErrorMessage>}
                             <label for="BirthDate">Data urodzenia</label>
                             <div className="datePickerStyle">
-                                <DatePicker
+                                <input
+                                    type="date"
                                     className="form-control form-control-lg input"
                                     name="BirthDate"
                                     placeholderText="Np. 01/01/1990"
-                                    selected={startDate}
-                                    onChange={(e) => setStartDate(e)}
                                     ref={register({ required: true })}
                                 />
                             </div>

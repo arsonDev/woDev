@@ -53,8 +53,8 @@ export default function Login() {
                 }
             })
             .catch((error) => {
-                setErrorMessage(error);
-                setOpenError(true);
+                // setErrorMessage(error);
+                // setOpenError(true);
             });
     };
 
@@ -74,7 +74,7 @@ export default function Login() {
                         {errors.password?.type === "required" && <ErrorMessage>Hasło jest wymagane</ErrorMessage>}
                     </div>
                     <div className="horizontalGroup">
-                        <Button variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>
+                        <Button variant="contained" color="primary" type="submit" >
                             Zaloguj
                         </Button>
                     </div>
@@ -88,7 +88,7 @@ export default function Login() {
                     </Link>
                 </div>
             </div>
-           {openError && <Error  error={errorMessage} closeCallback={closeError}/>}
+           {/* {openError && <Error error={errorMessage} closeCallback={closeError}/>} */}
         </div>
         {redirectTo != '' && <Redirect to={redirectTo}/>}
         </>

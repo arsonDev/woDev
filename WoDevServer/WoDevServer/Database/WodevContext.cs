@@ -9,13 +9,7 @@ namespace WoDevServer.Database
         public WodevContext(DbContextOptions<WodevContext> options) : base(options)
         {
             this.Database.EnsureCreated();
-            try
-            {
-                this.Database.Migrate();
-            }catch(Exception e)
-            {
-
-            }
+            //this.Database.Migrate();
         }
 
         public DbSet<User> User { get; set; }
@@ -46,7 +40,7 @@ namespace WoDevServer.Database
                 entity.HasKey(entity => entity.UserProfileId);
 
             });
-          
+
             modelBuilder.Entity<Technology>().ToTable("Technology");
             modelBuilder.Entity<Technology>(entity =>
             {
@@ -58,7 +52,7 @@ namespace WoDevServer.Database
             modelBuilder.Entity<ProfileTech>(entity =>
             {
                 entity.HasKey(entity => entity.Id);
-                entity.HasIndex(indexExpression => indexExpression.Id).IsUnique(true);                
+                entity.HasIndex(indexExpression => indexExpression.Id).IsUnique(true);
             });
 
             modelBuilder.Entity<UserProfileType>().ToTable("UserProfileType");
